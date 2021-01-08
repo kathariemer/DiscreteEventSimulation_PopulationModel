@@ -1,3 +1,5 @@
+package populationModel;
+
 import java.util.Random;
 
 public class RandomGenerator {

@@ -1,3 +1,7 @@
+package populationModel.person;
+
+import populationModel.Action;
+
 public interface Person {
 
     /**

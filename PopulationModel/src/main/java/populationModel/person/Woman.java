@@ -1,3 +1,8 @@
+package populationModel.person;
+
+import populationModel.Action;
+import populationModel.RandomGenerator;
+
 import java.util.ArrayList;
 
 public class Woman implements Person{

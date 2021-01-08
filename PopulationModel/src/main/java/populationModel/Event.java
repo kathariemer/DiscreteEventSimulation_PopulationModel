@@ -1,3 +1,7 @@
+package populationModel;
+
+import populationModel.person.Person;
+
 import java.util.LinkedList;
 
 /**
@@ -21,7 +25,7 @@ public class Event {
 
     /**
      * add scheduled death of person
-     * @param p Person
+     * @param p populationModel.person.Person
      */
     public void addDeath(Person p) {
         if (p.isFemale()) {
@@ -33,7 +37,7 @@ public class Event {
 
     /**
      * add scheduled emigration of person
-     * @param p Person
+     * @param p populationModel.person.Person
      */
     public void addEmigration(Person p) {
         if (p.isFemale()) {

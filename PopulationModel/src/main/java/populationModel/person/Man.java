@@ -1,5 +1,7 @@
-import java.security.cert.TrustAnchor;
-import java.util.Random;
+package populationModel.person;
+
+import populationModel.Action;
+import populationModel.RandomGenerator;
 
 public class Man implements Person{
     public static int maleID = 0;

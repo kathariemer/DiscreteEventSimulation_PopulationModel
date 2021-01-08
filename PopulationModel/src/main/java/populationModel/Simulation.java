@@ -1,3 +1,9 @@
+package populationModel;
+
+import populationModel.person.Man;
+import populationModel.person.Person;
+import populationModel.person.Woman;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -68,7 +74,7 @@ public class Simulation {
     /**
      * add person to female or male population, depending in gender
      * and schedule associated life events
-     * @param p Person
+     * @param p populationModel.person.Person
      */
     private void addPerson(Person p) {
         if (p.isFemale()) {

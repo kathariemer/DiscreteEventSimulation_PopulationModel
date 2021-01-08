@@ -1,3 +1,8 @@
+package populationModel;
+
+import populationModel.person.Man;
+import populationModel.person.Woman;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -40,9 +45,9 @@ public class EventList {
     }
 
     /**
-     * get Event associated with timestamp
+     * get populationModel.Event associated with timestamp
      * @param t timestamp
-     * @return a non-null Event
+     * @return a non-null populationModel.Event
      */
     private Event getEvent(Integer t) {
         Event e = eventlist.get(t);

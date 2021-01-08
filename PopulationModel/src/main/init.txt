@@ -1,0 +1,9 @@
+init_f = 100000
+init_m = 100000
+inv_deathRate_f = 81.4
+inv_deathRate_m = 79.8
+inv_emRate_f = 120
+inv_emRate_m = 120
+inv_birthRate = 20.0
+inv_immRate = 0.004
+timeSteps = 500

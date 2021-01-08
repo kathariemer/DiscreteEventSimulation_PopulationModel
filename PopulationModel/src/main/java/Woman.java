@@ -8,7 +8,6 @@ public class Woman implements Person{
     private Action exit;
     private int exitTime;
     private ArrayList<Integer> birthTimes = new ArrayList<Integer>();
-    private double lambdaBirth;
 
     /**
      * create a new woman and schedule her life events
@@ -31,8 +30,8 @@ public class Woman implements Person{
             exitTime = timestamp + (int)emigration;
         }
 
-        lambdaBirth = birthrate;
-        scheduleBirths(timestamp);
+        // update birthTimes ArrayList:
+        scheduleBirths(timestamp, birthrate);
     }
 
     @Override
@@ -52,15 +51,14 @@ public class Woman implements Person{
 
     public ArrayList<Integer> getBirthTimes() {return birthTimes;}
 
-    public double nextBirth() {
-        return rand.randomExp(lambdaBirth);
-    }
+    private void scheduleBirths(int timestamp, double birthRate) {
+        // get time to first birth
+        double totalTime = rand.randomExp(birthRate);
 
-    private void scheduleBirths(int timestamp) {
-        double totalTime = nextBirth();
+        // while next birth happens while woman in system: schedule next birth
         while (totalTime < exitTime-timestamp) {
             birthTimes.add(timestamp + (int)totalTime);
-            totalTime += nextBirth();
+            totalTime += rand.randomExp(birthRate);
         }
         birthTimes.trimToSize();
     }

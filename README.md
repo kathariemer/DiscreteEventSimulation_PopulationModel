@@ -12,7 +12,7 @@ Java/Maven Project
    + 1st line: Date of program execution
    + 2nd line: csv header
 
-### Run JAR file
+### Build and run JAR file
 
 In ```PopulationModel/``` directory run
 

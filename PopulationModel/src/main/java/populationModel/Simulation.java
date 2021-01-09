@@ -6,10 +6,8 @@ import populationModel.util.SimulationParameters;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static populationModel.util.RandomGenerator.*;
 
@@ -199,5 +197,13 @@ public class Simulation implements Iterator<String> {
                 e.scheduleManImmigration();
             }
         }
+    }
+
+    public List<Integer> getAgeF(int t) {
+        return populationF.stream().map(w -> t - w.getBirthTime()).collect(Collectors.toList());
+    }
+
+    public List<Integer> getAgeM(int t) {
+        return populationM.stream().map(m -> t - m.getBirthTime()).collect(Collectors.toList());
     }
 }

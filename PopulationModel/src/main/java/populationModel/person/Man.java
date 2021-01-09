@@ -12,6 +12,7 @@ public class Man implements Person{
     private final int id;
     private final Action exit;
     private final int exitTime;
+    private final int birthTime;
 
     /**
      * create new man and schedule his one life event
@@ -22,6 +23,7 @@ public class Man implements Person{
         id = maleID;
         maleID++;
 
+        birthTime = timestamp;
         double death = randomExp(params.getDeathRate(timestamp));
         double emigration = randomExp(params.getEmigrationRate(timestamp));
         if (death < emigration) {
@@ -59,6 +61,11 @@ public class Man implements Person{
         if (o == null || getClass() != o.getClass()) return false;
         Man man = (Man) o;
         return id == man.id;
+    }
+
+    @Override
+    public int getBirthTime() {
+        return birthTime;
     }
 
     @Override

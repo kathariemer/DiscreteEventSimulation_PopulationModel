@@ -21,5 +21,7 @@ public interface Person {
      */
     Action exitType();
 
+    int getBirthTime();
+
     String toString();
 }

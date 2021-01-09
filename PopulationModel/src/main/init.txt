@@ -1,7 +1,7 @@
 timeSteps = 240
 
-init_f = 500000
-init_m = 500000
+init_f = 1000000
+init_m = 1000000
 
 inv_deathRate_f = 81.4
 inv_deathRate_m = 79.8

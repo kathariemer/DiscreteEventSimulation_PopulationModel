@@ -1,8 +1,9 @@
 package populationModel.person;
 
 import populationModel.Action;
-import populationModel.SimulationParameters;
-import populationModel.util.RandomGenerator;
+import populationModel.util.SimulationParameters;
+
+import java.util.Objects;
 
 import static populationModel.util.RandomGenerator.randomExp;
 
@@ -52,4 +53,16 @@ public class Man implements Person{
         return "M: " + exitType() + " - " + exitDate();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Man man = (Man) o;
+        return id == man.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

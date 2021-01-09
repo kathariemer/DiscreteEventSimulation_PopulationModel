@@ -1,9 +1,10 @@
 package populationModel.person;
 
 import populationModel.Action;
-import populationModel.SimulationParameters;
+import populationModel.util.SimulationParameters;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static populationModel.util.RandomGenerator.randomExp;
 
@@ -73,5 +74,18 @@ public class Woman implements Person{
 
     public String toString() {
         return "F: " + exitType() + " - " + exitDate() + "Children" + getNumberOfChildren();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Woman woman = (Woman) o;
+        return id == woman.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

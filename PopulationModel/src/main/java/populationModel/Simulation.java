@@ -1,30 +1,27 @@
 package populationModel;
 
 import populationModel.person.Man;
-import populationModel.person.Person;
 import populationModel.person.Woman;
+import populationModel.util.SimulationParameters;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.Set;
 
 import static populationModel.util.RandomGenerator.*;
 
 public class Simulation implements Iterator<String> {
-    public static final String HEADER = String.format("time, populationF, populationM, %s", Event.HEADER);
+    public static final String HEADER = String.format("time, populationF, populationM, %s", TimeUnit.HEADER);
 
     private int time;
     private final EventHistory eventList;
 
     // todo: unnecessary to save people, consider not saving or saving only some statistic
-    private final HashMap<Integer, Woman> populationF = new HashMap<>();
-    private final HashMap<Integer, Man> populationM = new HashMap<>();
-
-    // TODO: change arrays to attributes -> alt+insert
-    private final int initialPopulationSizeWomen;
-    private final int initialPopulationSizeMen;
+    private final Set<Woman> populationF;
+    private final Set<Man> populationM;
 
     private final SimulationParameters womenParams;
     private final SimulationParameters menParams;
@@ -42,13 +39,15 @@ public class Simulation implements Iterator<String> {
     public Simulation(String inputFile) throws IOException, NumberFormatException {
         // create and load default properties
         Properties properties = new Properties();
-        FileInputStream inputStream= new FileInputStream(inputFile);
+        FileInputStream inputStream = new FileInputStream(inputFile);
         properties.load(inputStream);
         inputStream.close();
 
         // init parameters
-        initialPopulationSizeWomen = Integer.parseInt(properties.getProperty("init_f"));
-        initialPopulationSizeMen = Integer.parseInt(properties.getProperty("init_m"));
+        int initialPopulationSizeWomen = Integer.parseInt(properties.getProperty("init_f"));
+        populationF = new HashSet<>(initialPopulationSizeWomen);
+        int initialPopulationSizeMen = Integer.parseInt(properties.getProperty("init_m"));
+        populationM = new HashSet<>(initialPopulationSizeMen);
 
         immigrationRate = 1 / Double.parseDouble(properties.getProperty("inv_immRate"));
         slopeImmigrationRate = Double.parseDouble(properties.getProperty("slope_immRate"));
@@ -74,7 +73,7 @@ public class Simulation implements Iterator<String> {
 
         int duration = Integer.parseInt(properties.getProperty("timeSteps"));
         eventList = new EventHistory(duration);
-        initPopulation(0);
+        initPopulation(0, initialPopulationSizeWomen, initialPopulationSizeMen);
     }
 
 
@@ -83,38 +82,23 @@ public class Simulation implements Iterator<String> {
      *
      * @param time0
      */
-    private void initPopulation(int time0) throws IllegalArgumentException {
+    private void initPopulation(int time0, int sizeF, int sizeM) throws IllegalArgumentException {
         cumulativeImmigrationTime = (float) time0;
         if (time0 != 0) {
             throw new IllegalArgumentException("please start your simulation at time 0.");
         }
         // todo: maybe change people's ages
-        for (int i = 0; i < initialPopulationSizeWomen; i++) {
+        for (int i = 0; i < sizeF; i++) {
             Woman w = new Woman(time0, womenParams);
-            addPerson(w);
+            populationF.add(w);
         }
+        populationF.forEach(eventList::addEvents);
 
-        for (int i = 0; i < initialPopulationSizeMen; i++) {
+        for (int i = 0; i < sizeM; i++) {
             Man m = new Man(time0, menParams);
-            addPerson(m);
+            populationM.add(m);
         }
-    }
-
-
-    /**
-     * add newly birthed person to female or male population, depending on gender
-     * and schedule associated life events
-     *
-     * @param w populationModel.person.Person
-     */
-    private void addPerson(Woman w) {
-        eventList.addEvents(w);
-        populationF.put(w.getID(), w);
-    }
-
-    private void addPerson(Man m) {
-        eventList.addEvents(m);
-        populationM.put(m.getID(), m);
+        populationM.forEach(eventList::addEvents);
     }
 
     @Override
@@ -122,6 +106,15 @@ public class Simulation implements Iterator<String> {
         return time < eventList.getDuration();
     }
 
+    private void integrateWoman(Woman w) {
+        populationF.add(w);
+        eventList.addEvents(w);
+    }
+
+    private void integrateMan(Man m) {
+        populationM.add(m);
+        eventList.addEvents(m);
+    }
 
     /**
      * compute a time step and advance attribute "time" by 1
@@ -130,55 +123,53 @@ public class Simulation implements Iterator<String> {
      */
     @Override
     public String next() {
-        Event e = eventList.getEvent(time);
+        TimeUnit e = eventList.getTimeUnit(time);
         if (e != null) {
-            // birth
-            for (int i = 0; i < e.getBirths(); i++) {
-                if (randomUnif() < 0.5) {
-                    Woman w = new Woman(time, womenParams);
-                    addPerson(w);
-                } else {
-                    Man m = new Man(time, menParams);
-                    addPerson(m);
-                }
-            }
-
-            // immigrations
             addImmigrations(time, e);
+
+            // birth
+            for (int i = 0; i < e.getBirthsFemale(); i++) {
+                Woman w = new Woman(time, womenParams);
+                integrateWoman(w);
+            }
+            for (int i = 0; i < e.getBirthsMale(); i++) {
+                Man m = new Man(time, menParams);
+                integrateMan(m);
+            }
+            // immigrations
             for (int j = 0; j < e.getImmigrationsFemale(); j++) {
                 // TODO: add "age"? i.e. assume that person has age ~ N(30, 10)???
                 int birthYear = time - (int) randomNorm(30, 10);
-                Woman w = new Woman(birthYear, womenParams);
-                addPerson(w);
+                integrateWoman(new Woman(birthYear, womenParams));
             }
             for (int i = 0; i < e.getImmigrationsMale(); i++) {
                 int birthYear = time - (int) randomNorm(30, 10);
-                Man m = new Man(birthYear, menParams);
-                addPerson(m);
+                integrateMan(new Man(birthYear, menParams));
             }
 
             // emigrations
-            populationF.keySet().removeAll(e.getEmigrationsFemale());
-            populationM.keySet().removeAll(e.getEmigrationsMale());
+            populationF.removeAll(e.getEmigrationsFemale());
+            populationM.removeAll(e.getEmigrationsMale());
 
             // deaths
-            populationF.keySet().removeAll(e.getDeathsFemale());
-            populationM.keySet().removeAll(e.getDeathsMale());
+            populationF.removeAll(e.getDeathsFemale());
+            populationM.removeAll(e.getDeathsMale());
 
             // todo check if immediately leaving entities show up in toString()
             time++;
             return makeLine(time, e);
         } else {
             time++;
-            return makeLine(time, new Event());
+            return makeLine(time, new TimeUnit());
         }
+
     }
 
-    private String makeLine(int timeStamp, Event e) {
+    private String makeLine(int timeStamp, TimeUnit e) {
         return String.format("%d, %d, %d, %s\n", timeStamp, populationF.size(), populationM.size(), e.toString());
     }
 
-    private void addImmigrations(int timestamp, Event e) {
+    private void addImmigrations(int timestamp, TimeUnit e) {
         double probFemale = 0.5; // TODO: really 50:50?
         // compute how many immigrations happen in timestep
         while (cumulativeImmigrationTime < timestamp) {

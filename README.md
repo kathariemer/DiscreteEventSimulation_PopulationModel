@@ -3,7 +3,7 @@
 Java/Maven Project
 
 * Usage: ```program [-i <path_to_input_file> -o <path_to_output_file>]```
-    + if no input file is specified, the porject's example file is used
+    + if no input file is specified, the project's example file is used
     + if no output file is specified, the program prints to stdout
     + the simulation's runtime is printed to stderr (in seconds)
 * Input file: specify parameters in format ```parameterName = parameterValue```

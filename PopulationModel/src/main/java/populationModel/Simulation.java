@@ -19,7 +19,6 @@ public class Simulation implements Iterator<String> {
     private int time;
     private final EventHistory eventList;
 
-    // todo: unnecessary to save people, consider not saving or saving only some statistic
     private final Set<Woman> populationF;
     private final Set<Man> populationM;
 
@@ -33,6 +32,8 @@ public class Simulation implements Iterator<String> {
     /**
      * read parameters from input file, where each line starts with the key name, followed by an equality symbol and
      * then the value. In order to ensure correct parsing, no punctuation is accepted.
+     *
+     * save all parameters for the simulation and initialize the population
      *
      * @param inputFile path to input file
      */
@@ -78,15 +79,13 @@ public class Simulation implements Iterator<String> {
 
 
     /**
-     * Initialize a population of x women and y men
-     *
-     * @param time0
+     * initialize population
+     * @param time0 starting time
+     * @param sizeF number of women
+     * @param sizeM number of men
      */
-    private void initPopulation(int time0, int sizeF, int sizeM) throws IllegalArgumentException {
+    private void initPopulation(int time0, int sizeF, int sizeM) {
         cumulativeImmigrationTime = (float) time0;
-        if (time0 != 0) {
-            throw new IllegalArgumentException("please start your simulation at time 0.");
-        }
         // todo: maybe change people's ages
         for (int i = 0; i < sizeF; i++) {
             Woman w = new Woman(time0, womenParams);
@@ -104,16 +103,6 @@ public class Simulation implements Iterator<String> {
     @Override
     public boolean hasNext() {
         return time < eventList.getDuration();
-    }
-
-    private void integrateWoman(Woman w) {
-        populationF.add(w);
-        eventList.addEvents(w);
-    }
-
-    private void integrateMan(Man m) {
-        populationM.add(m);
-        eventList.addEvents(m);
     }
 
     /**
@@ -165,10 +154,38 @@ public class Simulation implements Iterator<String> {
 
     }
 
+    /**
+     * add woman to population and add life events to eventList
+     * @param w woman
+     */
+    private void integrateWoman(Woman w) {
+        populationF.add(w);
+        eventList.addEvents(w);
+    }
+
+    /**
+     * add man to population and add life event to event list
+     * @param m man
+     */
+    private void integrateMan(Man m) {
+        populationM.add(m);
+        eventList.addEvents(m);
+    }
+
+    /**
+     * @param timeStamp current time
+     * @param e events happening at time timeStamp
+     * @return line of comma-separated statistics
+     */
     private String makeLine(int timeStamp, TimeUnit e) {
         return String.format("%d, %d, %d, %s\n", timeStamp, populationF.size(), populationM.size(), e.toString());
     }
 
+    /**
+     * compute number of immigrations in TimeUnit e
+     * @param timestamp current time
+     * @param e time unit
+     */
     private void addImmigrations(int timestamp, TimeUnit e) {
         double probFemale = 0.5; // TODO: really 50:50?
         // compute how many immigrations happen in timestep

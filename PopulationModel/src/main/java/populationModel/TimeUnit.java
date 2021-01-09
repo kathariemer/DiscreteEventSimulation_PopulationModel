@@ -7,11 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * holds information about Events, which are scheduled to happen within a time step
+ * holds information about events, which are scheduled to happen within a time step
  */
-public class Event {
-    public static final String HEADER = "births, immigrationsF, immigrationsM, deathsF, deathsM, emigrationsF, emigrationsM";
-    private int births = 0;
+public class TimeUnit {
+    public static final String HEADER = "birthsF, birthsM, immigrationsF, immigrationsM, deathsF, deathsM, emigrationsF, emigrationsM";
+    private int birthsFemale = 0;
+    private int birthsMale = 0;
     private int immigrationsFemale = 0;
     private int immigrationsMale = 0;
 
@@ -20,7 +21,7 @@ public class Event {
     private final List<Woman> emigrationsFemale;
     private final List<Man> emigrationsMale;
 
-    public Event() {
+    public TimeUnit() {
         emigrationsMale = new ArrayList<>();
         deathsFemale = new ArrayList<>();
         deathsMale = new ArrayList<>();
@@ -30,8 +31,12 @@ public class Event {
     /**
      * increase number of scheduled births by 1
      */
-    public void scheduleOneBirth() {
-        births++;
+    public void scheduleGirlBirth() {
+        birthsFemale++;
+    }
+
+    public void scheduleBoyBirth() {
+        birthsMale++;
     }
 
     /**
@@ -73,8 +78,13 @@ public class Event {
     public void scheduleManImmigration() {
         immigrationsMale++;
     }
-    public int getBirths() {
-        return births;
+
+    public int getBirthsFemale() {
+        return birthsFemale;
+    }
+
+    public int getBirthsMale() {
+        return birthsMale;
     }
 
     public int getImmigrationsFemale() {
@@ -103,7 +113,8 @@ public class Event {
 
     @Override
     public String toString() {
-        return births +
+        return birthsFemale +
+                ", " + birthsMale +
                 ", " + immigrationsFemale +
                 ", " + immigrationsMale +
                 ", " + deathsFemale.size() +

@@ -5,13 +5,15 @@ import populationModel.person.Woman;
 
 import java.util.ArrayList;
 
+import static populationModel.util.RandomGenerator.randomUnif;
+
 public class EventHistory {
-    private Event[] eventList;
+    private final TimeUnit[] eventList;
 
     public EventHistory(int size) {
-        eventList = new Event[size];
+        eventList = new TimeUnit[size];
         for (int i = 0; i < eventList.length; i++) {
-            eventList[i] = new Event();
+            eventList[i] = new TimeUnit();
         }
     }
 
@@ -21,7 +23,7 @@ public class EventHistory {
      * @param person man
      */
     public void addEvents(Man person) {
-        Event e = getEvent(person.exitDate());
+        TimeUnit e = getTimeUnit(person.exitDate());
         if (e != null) {
             if (person.exitType() == Action.DEATH) {
                 e.scheduleOneDeath(person);
@@ -31,15 +33,13 @@ public class EventHistory {
         }
     }
 
-    ;
-
     /**
      * add life events scheduled for a woman
      *
      * @param w woman
      */
     public void addEvents(Woman w) {
-        Event e = getEvent(w.exitDate());
+        TimeUnit e = getTimeUnit(w.exitDate());
         if (e != null) {
             if (w.exitType() == Action.DEATH) {
                 e.scheduleOneDeath(w);
@@ -51,20 +51,28 @@ public class EventHistory {
     }
 
     /**
-     * add scheduled births
+     * add scheduled births and randomly compute gender
      *
      * @param timestamp of scheduled births
      */
     public void addBirths(ArrayList<Integer> timestamp) {
         for (int t : timestamp) {
-            Event event = getEvent(t);
-            if (event != null) {
-                event.scheduleOneBirth();
+            TimeUnit timeUnit = getTimeUnit(t);
+            if (timeUnit != null) {
+                if (randomUnif() < 0.5) {
+                    timeUnit.scheduleGirlBirth();
+                } else {
+                    timeUnit.scheduleBoyBirth();
+                }
             }
         }
     }
 
-    public Event getEvent(int t) {
+    /**
+     * @param t associated time
+     * @return TimeUnit, i.e. all events sceduled to happen at time t
+     */
+    public TimeUnit getTimeUnit(int t) {
         if (t >= 0 && t < eventList.length) {
             return eventList[t];
         }

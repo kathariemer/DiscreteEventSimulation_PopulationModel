@@ -14,4 +14,8 @@ Java/Maven Project
 
 ### Run JAR file
 
-In ```PopulationModel/``` directory run ```java -cp target/PopulationModel-1.0-SNAPSHOT.jar populationModel.Main``` with desired program arguments.
+In ```PopulationModel/``` directory run
+
+1. ```mvn install```
+1. ```mvn package```
+1. ```java -cp target/PopulationModel-1.0-SNAPSHOT.jar populationModel.Main``` with desired program arguments.

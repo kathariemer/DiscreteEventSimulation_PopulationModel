@@ -26,21 +26,10 @@ public class Simulation implements Iterator<String> {
     private final int initialPopulationSizeWomen;
     private final int initialPopulationSizeMen;
 
-    // values at time 0 - intercept
-    private final double deathRateWomen;
-    private final double deathRateMen;
-    private final double emigrationRateWomen;
-    private final double emigrationRateMen;
-    private final double birthRate;
-    private final double immigrationRate;
+    private final SimulationParameters womenParams;
+    private final SimulationParameters menParams;
 
-    // todo: add slope coefficients
-    private final double slopeDeathRateWomen;
-    private final double slopeDeathRateMen;
-    private final double slopeEmigrationRateWomen;
-    private final double slopeEmigrationRateMen;
-    private final double slopeImmigrationRate;
-    private final double slopeBirthRate;
+    private final double immigrationRate, slopeImmigrationRate;
 
     private double cumulativeImmigrationTime;
 
@@ -61,21 +50,27 @@ public class Simulation implements Iterator<String> {
         initialPopulationSizeWomen = Integer.parseInt(properties.getProperty("init_f"));
         initialPopulationSizeMen = Integer.parseInt(properties.getProperty("init_m"));
 
-        deathRateWomen = 1 / Double.parseDouble(properties.getProperty("inv_deathRate_f"));
-        deathRateMen = 1 / Double.parseDouble(properties.getProperty("inv_deathRate_m"));
-        slopeDeathRateWomen = Double.parseDouble(properties.getProperty("slope_deathRate_f"));
-        slopeDeathRateMen = Double.parseDouble(properties.getProperty("slope_deathRate_m"));
-
-        emigrationRateWomen = 1 / Double.parseDouble(properties.getProperty("inv_emRate_f"));
-        emigrationRateMen = 1 / Double.parseDouble(properties.getProperty("inv_emRate_m"));
-        slopeEmigrationRateWomen = Double.parseDouble(properties.getProperty("slope_emRate_f"));
-        slopeEmigrationRateMen = Double.parseDouble(properties.getProperty("slope_emRate_m"));
-
-        birthRate = 1 / Double.parseDouble(properties.getProperty("inv_birthRate"));
-        slopeBirthRate = Double.parseDouble(properties.getProperty("slope_birthRate"));
-
         immigrationRate = 1 / Double.parseDouble(properties.getProperty("inv_immRate"));
         slopeImmigrationRate = Double.parseDouble(properties.getProperty("slope_immRate"));
+
+        double deathRateWomen = 1 / Double.parseDouble(properties.getProperty("inv_deathRate_f"));
+        double slopeDeathRateWomen = Double.parseDouble(properties.getProperty("slope_deathRate_f"));
+        double emigrationRateWomen = 1 / Double.parseDouble(properties.getProperty("inv_emRate_f"));
+        double slopeEmigrationRateWomen = Double.parseDouble(properties.getProperty("slope_emRate_f"));
+        double birthRate = 1 / Double.parseDouble(properties.getProperty("inv_birthRate"));
+        double slopeBirthRate = Double.parseDouble(properties.getProperty("slope_birthRate"));
+
+        womenParams = new SimulationParameters(deathRateWomen, slopeDeathRateWomen,
+                emigrationRateWomen, slopeEmigrationRateWomen,
+                birthRate, slopeBirthRate);
+
+        double deathRateMen = 1 / Double.parseDouble(properties.getProperty("inv_deathRate_m"));
+        double slopeDeathRateMen = Double.parseDouble(properties.getProperty("slope_deathRate_m"));
+        double emigrationRateMen = 1 / Double.parseDouble(properties.getProperty("inv_emRate_m"));
+        double slopeEmigrationRateMen = Double.parseDouble(properties.getProperty("slope_emRate_m"));
+
+        menParams = new SimulationParameters(deathRateMen, slopeDeathRateMen,
+                emigrationRateMen, slopeEmigrationRateMen);
 
         int duration = Integer.parseInt(properties.getProperty("timeSteps"));
         eventList = new EventHistory(duration);
@@ -95,12 +90,12 @@ public class Simulation implements Iterator<String> {
         }
         // todo: maybe change people's ages
         for (int i = 0; i < initialPopulationSizeWomen; i++) {
-            Woman w = new Woman(time0, getDeathRateWomen(time0), getEmigrationRateWomen(time0), getBirthRate(time0));
+            Woman w = new Woman(time0, womenParams);
             addPerson(w);
         }
 
         for (int i = 0; i < initialPopulationSizeMen; i++) {
-            Man m = new Man(time0, getDeathRateMen(time0), getEmigrationRateMen(time0));
+            Man m = new Man(time0, menParams);
             addPerson(m);
         }
     }
@@ -140,10 +135,10 @@ public class Simulation implements Iterator<String> {
             // birth
             for (int i = 0; i < e.getBirths(); i++) {
                 if (randomUnif() < 0.5) {
-                    Woman w = new Woman(time, getDeathRateWomen(time), getEmigrationRateWomen(time), getBirthRate(time));
+                    Woman w = new Woman(time, womenParams);
                     addPerson(w);
                 } else {
-                    Man m = new Man(time, getDeathRateMen(time), getEmigrationRateMen(time));
+                    Man m = new Man(time, menParams);
                     addPerson(m);
                 }
             }
@@ -153,12 +148,12 @@ public class Simulation implements Iterator<String> {
             for (int j = 0; j < e.getImmigrationsFemale(); j++) {
                 // TODO: add "age"? i.e. assume that person has age ~ N(30, 10)???
                 int birthYear = time - (int) randomNorm(30, 10);
-                Woman w = new Woman(birthYear, getDeathRateWomen(birthYear), getEmigrationRateWomen(birthYear), getBirthRate(birthYear));
+                Woman w = new Woman(birthYear, womenParams);
                 addPerson(w);
             }
             for (int i = 0; i < e.getImmigrationsMale(); i++) {
                 int birthYear = time - (int) randomNorm(30, 10);
-                Man m = new Man(birthYear, getDeathRateMen(birthYear), getEmigrationRateMen(birthYear));
+                Man m = new Man(birthYear, menParams);
                 addPerson(m);
             }
 
@@ -185,35 +180,16 @@ public class Simulation implements Iterator<String> {
 
     private void addImmigrations(int timestamp, Event e) {
         double probFemale = 0.5; // TODO: really 50:50?
-        // todo: I don't get why immigration rate and emigration rates are so different :(
+        // compute how many immigrations happen in timestep
         while (cumulativeImmigrationTime < timestamp) {
-            cumulativeImmigrationTime += randomExp(getImmigrationRate(timestamp));
-            e.addImmigration(randomUnif() < probFemale);
+            double lambda = SimulationParameters.affineLinear(timestamp, immigrationRate, slopeImmigrationRate);
+            // todo: last immigration actually should happen in next timestep
+            cumulativeImmigrationTime += randomExp(lambda);
+            if (randomUnif() < probFemale) {
+                e.scheduleWomanImmigration();
+            } else {
+                e.scheduleManImmigration();
+            }
         }
-    }
-
-    // get dynamic values
-    private double getDeathRateWomen(int t) {
-        return deathRateWomen + t * slopeDeathRateWomen;
-    }
-
-    private double getDeathRateMen(int t) {
-        return deathRateMen + t * slopeDeathRateMen;
-    }
-
-    private double getEmigrationRateWomen(int t) {
-        return emigrationRateWomen + t * slopeEmigrationRateWomen;
-    }
-
-    private double getEmigrationRateMen(int t) {
-        return emigrationRateMen + t * slopeEmigrationRateMen;
-    }
-
-    private double getBirthRate(int t) {
-        return birthRate + t * slopeBirthRate;
-    }
-
-    private double getImmigrationRate(int t) {
-        return immigrationRate + t * slopeImmigrationRate;
     }
 }

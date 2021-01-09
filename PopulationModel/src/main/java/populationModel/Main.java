@@ -76,7 +76,7 @@ public class Main {
             String output = sim.next();
             printWriter.printf(output);
         }
-        System.out.println("Run time: " + (System.currentTimeMillis() - tic) + " Millis");
+        System.err.println("Run time: " + (System.currentTimeMillis() - tic) + " Millis");
         printWriter.close();
     }
 }

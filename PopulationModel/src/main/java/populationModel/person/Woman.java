@@ -1,6 +1,7 @@
 package populationModel.person;
 
 import populationModel.Action;
+import populationModel.SimulationParameters;
 
 import java.util.ArrayList;
 
@@ -17,16 +18,14 @@ public class Woman implements Person{
     /**
      * create a new woman and schedule her life events
      * @param timestamp timestamp of creation
-     * @param deathRate inverse of life expectancy
-     * @param emRate inverse of ???
-     * @param birthrate inverse of ???
+     * @param params SimulationParameters with initialized birth rate
      */
-    public Woman(int timestamp, double deathRate, double emRate, double birthrate) {
+    public Woman(int timestamp, SimulationParameters params) {
         id = femaleID;
         femaleID++;
 
-        double death = randomExp(deathRate);
-        double emigration = randomExp(emRate);
+        double death = randomExp(params.getDeathRate(timestamp));
+        double emigration = randomExp(params.getEmigrationRate(timestamp));
         if (death < emigration) {
             exit = Action.DEATH;
             exitTime = timestamp + (int)death;
@@ -36,7 +35,7 @@ public class Woman implements Person{
         }
 
         // update birthTimes ArrayList:
-        scheduleBirths(timestamp, birthrate);
+        scheduleBirths(timestamp, params.getBirthRate(timestamp));
     }
 
     @Override
@@ -66,16 +65,6 @@ public class Woman implements Person{
             totalTime += randomExp(birthRate);
         }
         birthTimes.trimToSize();
-    }
-
-    @Override
-    public boolean isFemale() {
-        return true;
-    }
-
-    @Override
-    public boolean isMale() {
-        return false;
     }
 
     public int getNumberOfChildren() {

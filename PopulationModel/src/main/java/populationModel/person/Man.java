@@ -1,28 +1,28 @@
 package populationModel.person;
 
 import populationModel.Action;
+import populationModel.SimulationParameters;
 import populationModel.util.RandomGenerator;
 
 import static populationModel.util.RandomGenerator.randomExp;
 
 public class Man implements Person{
     public static int maleID = 0;
-    private int id;
-    private Action exit;
-    private int exitTime;
+    private final int id;
+    private final Action exit;
+    private final int exitTime;
 
     /**
      * create new man and schedule his one life event
-     * @param timestamp
-     * @param deathRate
-     * @param emRate
+     * @param timestamp time of this person's birth
+     * @param params SimulationParameters
      */
-    public Man(int timestamp, double deathRate, double emRate) {
+    public Man(int timestamp, SimulationParameters params) {
         id = maleID;
         maleID++;
 
-        double death = randomExp(deathRate);
-        double emigration = randomExp(emRate);
+        double death = randomExp(params.getDeathRate(timestamp));
+        double emigration = randomExp(params.getEmigrationRate(timestamp));
         if (death < emigration) {
             exit = Action.DEATH;
             exitTime = timestamp + (int)death;
@@ -46,16 +46,6 @@ public class Man implements Person{
     @Override
     public Action exitType() {
         return exit;
-    }
-
-    @Override
-    public boolean isFemale() {
-        return false;
-    }
-
-    @Override
-    public boolean isMale() {
-        return true;
     }
 
     public String toString() {

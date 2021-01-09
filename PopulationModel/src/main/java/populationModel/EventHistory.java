@@ -4,7 +4,6 @@ import populationModel.person.Man;
 import populationModel.person.Woman;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class EventHistory {
     private Event[] eventList;
@@ -25,9 +24,9 @@ public class EventHistory {
         Event e = getEvent(person.exitDate());
         if (e != null) {
             if (person.exitType() == Action.DEATH) {
-                e.addDeath(person);
+                e.scheduleOneDeath(person);
             } else {
-                e.addEmigration(person);
+                e.scheduleOneEmigration(person);
             }
         }
     }
@@ -43,9 +42,9 @@ public class EventHistory {
         Event e = getEvent(w.exitDate());
         if (e != null) {
             if (w.exitType() == Action.DEATH) {
-                e.addDeath(w);
+                e.scheduleOneDeath(w);
             } else {
-                e.addEmigration(w);
+                e.scheduleOneEmigration(w);
             }
         }
         addBirths(w.getBirthTimes());
@@ -60,7 +59,7 @@ public class EventHistory {
         for (int t : timestamp) {
             Event event = getEvent(t);
             if (event != null) {
-                event.addBirth();
+                event.scheduleOneBirth();
             }
         }
     }

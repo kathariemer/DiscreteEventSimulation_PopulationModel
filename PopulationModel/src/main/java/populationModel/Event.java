@@ -1,11 +1,9 @@
 package populationModel;
 
 import populationModel.person.Man;
-import populationModel.person.Person;
 import populationModel.person.Woman;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -32,7 +30,7 @@ public class Event {
     /**
      * increase number of scheduled births by 1
      */
-    public void addBirth() {
+    public void scheduleOneBirth() {
         births++;
     }
 
@@ -41,11 +39,11 @@ public class Event {
      *
      * @param w populationModel.person.Person
      */
-    public void addDeath(Woman w) {
+    public void scheduleOneDeath(Woman w) {
         deathsFemale.add(w);
     }
 
-    public void addDeath(Man p) {
+    public void scheduleOneDeath(Man p) {
         deathsMale.add(p);
     }
 
@@ -54,27 +52,27 @@ public class Event {
      *
      * @param p populationModel.person.Person
      */
-    public void addEmigration(Man p) {
+    public void scheduleOneEmigration(Man p) {
         emigrationsMale.add(p);
     }
 
-    public void addEmigration(Woman p) {
+    public void scheduleOneEmigration(Woman p) {
         emigrationsFemale.add(p);
     }
 
     /**
-     * add scheduled immigration of person
-     *
-     * @param female boolean specifying gender
+     * add scheduled immigration of one woman
      */
-    public void addImmigration(boolean female) {
-        if (female) {
-            immigrationsFemale++;
-        } else {
-            immigrationsMale++;
-        }
+    public void scheduleWomanImmigration() {
+        immigrationsFemale++;
     }
 
+    /**
+     * add scheduled immigration of one man
+     */
+    public void scheduleManImmigration() {
+        immigrationsMale++;
+    }
     public int getBirths() {
         return births;
     }

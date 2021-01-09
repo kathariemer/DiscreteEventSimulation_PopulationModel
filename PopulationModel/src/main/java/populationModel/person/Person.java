@@ -21,8 +21,5 @@ public interface Person {
      */
     Action exitType();
 
-    boolean isFemale();
-    boolean isMale();
-
     String toString();
 }

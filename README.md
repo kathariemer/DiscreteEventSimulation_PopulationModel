@@ -2,7 +2,11 @@
 
 Java/Maven Project
 
-Operates with/on input files as specified in ```main() method```:
-
-* Run discrete event simulation with inital parameters as specified in ```'PopulationModel/src/init.txt'```
-* Saves results in ```'PopulationModel/target/generated-sources/res.csv'``` - with a comment-header line with execution time/date. When reading in the ```csv```-file, skip the first row.
+* Usage: ```program -i <path_to_input_file> [-o <path_to_output_file>]```
+    + if no output file is specified, the program prints to stdout
+    + the simulation's runtime is printed to stderr (in milliseconds)
+* Input file: specify parameters in format ```parameterName = parameterValue```
+    + example parameter file in ```PopulationModel/src/main/init.txt```
+* Output: population statistics in csv-format
+   + 1st line: Date of program execution
+   + 2nd line: csv header

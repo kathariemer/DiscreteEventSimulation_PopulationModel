@@ -30,8 +30,10 @@ public class Main {
             if (cmd.hasOption("i")) {
                 inputPath = cmd.getOptionValue("i");
             } else {
-                usage();
-                return;
+                inputPath = "src/main/init.txt";
+                System.err.println("Using example parameters.");
+                //usage();
+                //return;
             }
             if (cmd.hasOption("o")) {
                 String outputPath = cmd.getOptionValue("o");
@@ -51,6 +53,7 @@ public class Main {
 
 
         // initialize simulation with parameters specified in file
+        long tic = System.currentTimeMillis();
         Simulation sim = null;
         try {
             sim = new Simulation(inputPath);
@@ -66,17 +69,12 @@ public class Main {
         printWriter.println("# populationModel.Simulation run on " + Calendar.getInstance().getTime());
         printWriter.println(Simulation.HEADER);
 
-        // define starting time and initialize simulation
-        int t = 0;
-
-        long tic = System.currentTimeMillis();
-
         // run simulation
         while(sim.hasNext()) {
             String output = sim.next();
             printWriter.printf(output);
         }
-        System.err.println("Run time: " + (System.currentTimeMillis() - tic) + " Millis");
+        System.err.println("Run time: " + (System.currentTimeMillis() - tic)/1000.0 + " seconds");
         printWriter.close();
     }
 }

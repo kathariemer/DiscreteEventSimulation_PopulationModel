@@ -1,4 +1,4 @@
-package populationModel;
+package populationModel.util;
 
 public class SimulationParameters {
 
@@ -19,10 +19,8 @@ public class SimulationParameters {
      * @param deathRate death rate for a person, value from interval (0, 1]
      * @param emigrationRate emigration rate for a person
      * @param birthRate birth rate for a person
-     * @param immigrationRate immigration rate for an outside population
      * @param slopeDeathRate coefficient for death rate as (affine) linear function in t
      * @param slopeEmigrationRate coefficient for emigration rate as (affine) linear function in t
-     * @param slopeImmigrationRate coefficient for immigration rate as (affine) linear function in t
      * @param slopeBirthRate coefficient for birthrate as (affine) linear function in t
      */
     public SimulationParameters(double deathRate, double slopeDeathRate,

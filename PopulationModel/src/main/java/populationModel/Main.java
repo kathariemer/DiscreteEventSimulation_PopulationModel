@@ -2,6 +2,7 @@ package populationModel;
 
 import org.apache.commons.cli.*;
 
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,7 +15,7 @@ public class Main {
         System.exit(1);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         // parse program arguments
         final Options options = new Options();
         options.addOption(new Option("i", "input", true, "Input file path, if not specified use standard input."));
@@ -26,13 +27,13 @@ public class Main {
         PrintWriter printWriter;
         try {
             CommandLine cmd = parser.parse(options, args);
-            if(cmd.hasOption("i")) {
+            if (cmd.hasOption("i")) {
                 inputPath = cmd.getOptionValue("i");
             } else {
                 usage();
                 return;
             }
-            if(cmd.hasOption("o")) {
+            if (cmd.hasOption("o")) {
                 String outputPath = cmd.getOptionValue("o");
                 printWriter = new PrintWriter(outputPath);
             } else {
@@ -42,24 +43,38 @@ public class Main {
             e.printStackTrace();
             usage();
             return;
+        } catch (FileNotFoundException e) {
+            System.err.printf("Directory of output file does not exist");
+            System.exit(1);
+            return;
         }
 
 
         // initialize simulation with parameters specified in file
-        Simulation sim = new Simulation(inputPath);
+        Simulation sim = null;
+        try {
+            sim = new Simulation(inputPath);
+        } catch (IOException e) {
+            System.err.println("bad input file");
+            System.exit(1);
+        } catch (NumberFormatException e) {
+            System.err.println("bad input numbers");
+            System.exit(1);
+        }
 
         // write header line to output file
         printWriter.println("# populationModel.Simulation run on " + Calendar.getInstance().getTime());
-        printWriter.println(Simulation.getHeader());
+        printWriter.println(Simulation.HEADER);
 
         // define starting time and initialize simulation
         int t = 0;
-        sim.init(t);
 
         long tic = System.currentTimeMillis();
+
         // run simulation
-        for (; t < sim.getMaxSteps(); t++) {
-            printWriter.printf(sim.step(t));
+        while(sim.hasNext()) {
+            String output = sim.next();
+            printWriter.printf(output);
         }
         System.out.println("Run time: " + (System.currentTimeMillis() - tic) + " Millis");
         printWriter.close();

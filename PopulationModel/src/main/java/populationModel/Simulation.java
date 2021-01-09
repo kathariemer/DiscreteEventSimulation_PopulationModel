@@ -5,138 +5,160 @@ import populationModel.person.Person;
 import populationModel.person.Woman;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Properties;
 
-public class Simulation {
-    private final RandomGenerator rand = new RandomGenerator();
-    private final boolean FEMALE = true;
-    private final boolean MALE = false;
+import static populationModel.util.RandomGenerator.*;
 
-    private EventList eventlist = new EventList();
+public class Simulation implements Iterator<String> {
+    public static final String HEADER = String.format("time, populationF, populationM, %s", Event.HEADER);
 
-    private int[] p_init = new int[2];
+    private int time;
+    private final EventHistory eventList;
+
     // todo: unnecessary to save people, consider not saving or saving only some statistic
-    private HashMap<Integer, Woman> populationF = new HashMap<Integer, Woman>();
-    private HashMap<Integer, Man> populationM = new HashMap<Integer, Man>();
+    private final HashMap<Integer, Woman> populationF = new HashMap<>();
+    private final HashMap<Integer, Man> populationM = new HashMap<>();
 
-    private double[] deathRates = new double[2];
-    private double[] emigrationRates = new double[2];
-    private double birthRate = 0.0;
-    private double immRate = 0.0;
+    // TODO: change arrays to attributes -> alt+insert
+    private final int initialPopulationSizeWomen;
+    private final int initialPopulationSizeMen;
+
+    // values at time 0 - intercept
+    private final double deathRateWomen;
+    private final double deathRateMen;
+    private final double emigrationRateWomen;
+    private final double emigrationRateMen;
+    private final double birthRate;
+    private final double immigrationRate;
 
     // todo: add slope coefficients
-    private final double coef_b = 0.0;
+    private final double slopeDeathRateWomen;
+    private final double slopeDeathRateMen;
+    private final double slopeEmigrationRateWomen;
+    private final double slopeEmigrationRateMen;
+    private final double slopeImmigrationRate;
+    private final double slopeBirthRate;
 
-    public int timeSteps = 500;
     private double cumulativeImmigrationTime;
 
     /**
      * read parameters from input file, where each line starts with the key name, followed by an equality symbol and
      * then the value. In order to ensure correct parsing, no punctuation is accepted.
+     *
      * @param inputFile path to input file
      */
-    public Simulation(String inputFile) {
+    public Simulation(String inputFile) throws IOException, NumberFormatException {
         // create and load default properties
         Properties properties = new Properties();
-        FileInputStream in = null;
-        try {
-            in = new FileInputStream(inputFile);
-            properties.load(in);
-            initParams(properties);
-            in.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FileInputStream inputStream= new FileInputStream(inputFile);
+        properties.load(inputStream);
+        inputStream.close();
+
+        // init parameters
+        initialPopulationSizeWomen = Integer.parseInt(properties.getProperty("init_f"));
+        initialPopulationSizeMen = Integer.parseInt(properties.getProperty("init_m"));
+
+        deathRateWomen = 1 / Double.parseDouble(properties.getProperty("inv_deathRate_f"));
+        deathRateMen = 1 / Double.parseDouble(properties.getProperty("inv_deathRate_m"));
+        slopeDeathRateWomen = Double.parseDouble(properties.getProperty("slope_deathRate_f"));
+        slopeDeathRateMen = Double.parseDouble(properties.getProperty("slope_deathRate_m"));
+
+        emigrationRateWomen = 1 / Double.parseDouble(properties.getProperty("inv_emRate_f"));
+        emigrationRateMen = 1 / Double.parseDouble(properties.getProperty("inv_emRate_m"));
+        slopeEmigrationRateWomen = Double.parseDouble(properties.getProperty("slope_emRate_f"));
+        slopeEmigrationRateMen = Double.parseDouble(properties.getProperty("slope_emRate_m"));
+
+        birthRate = 1 / Double.parseDouble(properties.getProperty("inv_birthRate"));
+        slopeBirthRate = Double.parseDouble(properties.getProperty("slope_birthRate"));
+
+        immigrationRate = 1 / Double.parseDouble(properties.getProperty("inv_immRate"));
+        slopeImmigrationRate = Double.parseDouble(properties.getProperty("slope_immRate"));
+
+        int duration = Integer.parseInt(properties.getProperty("timeSteps"));
+        eventList = new EventHistory(duration);
+        initPopulation(0);
     }
 
-    private void initParams(Properties p) {
-        p_init[0] = Integer.parseInt(p.getProperty("init_f"));
-        p_init[1] = Integer.parseInt(p.getProperty("init_m"));
-
-        // todo add coefficients for linear function
-        deathRates[0] = 1/Double.parseDouble(p.getProperty("inv_deathRate_f"));
-        deathRates[1] = 1/Double.parseDouble(p.getProperty("inv_deathRate_m"));
-
-        emigrationRates[0] = 1/Double.parseDouble(p.getProperty("inv_emRate_f"));
-        emigrationRates[1] = 1/Double.parseDouble(p.getProperty("inv_emRate_m"));
-
-        birthRate = 1/Double.parseDouble(p.getProperty("inv_birthRate"));
-        immRate = 1/Double.parseDouble(p.getProperty("inv_immRate"));
-
-        timeSteps = Integer.parseInt(p.getProperty("timeSteps"));
-    }
-
-    /**
-     * add person to female or male population, depending in gender
-     * and schedule associated life events
-     * @param p populationModel.person.Person
-     */
-    private void addPerson(Person p) {
-        if (p.isFemale()) {
-            Woman w = (Woman)p;
-            eventlist.addEvents(w);
-            populationF.put(w.getID(), w);
-        } else {
-            Man m = (Man)p;
-            eventlist.addEvents(m);
-            populationM.put(m.getID(), m);
-        }
-    }
 
     /**
      * Initialize a population of x women and y men
+     *
      * @param time0
      */
-    public void init(int time0) throws IllegalArgumentException {
-        cumulativeImmigrationTime = (float)time0;
+    private void initPopulation(int time0) throws IllegalArgumentException {
+        cumulativeImmigrationTime = (float) time0;
         if (time0 != 0) {
             throw new IllegalArgumentException("please start your simulation at time 0.");
         }
-        for (int i = 0; i < getInitialPopulationSize(FEMALE); i++) {
-            Woman w = new Woman(time0, getDeathRate(FEMALE), getEmigrationRate(FEMALE), getBirthRate(time0));
-            //System.out.print(w.getNumberOfChildren()+",");
+        // todo: maybe change people's ages
+        for (int i = 0; i < initialPopulationSizeWomen; i++) {
+            Woman w = new Woman(time0, getDeathRateWomen(time0), getEmigrationRateWomen(time0), getBirthRate(time0));
             addPerson(w);
         }
 
-        for (int i = 0; i < getInitialPopulationSize(MALE); i++) {
-            Man m = new Man(time0, getDeathRate(MALE), getEmigrationRate(MALE));
+        for (int i = 0; i < initialPopulationSizeMen; i++) {
+            Man m = new Man(time0, getDeathRateMen(time0), getEmigrationRateMen(time0));
             addPerson(m);
         }
     }
 
+
     /**
-     * compute a time step
-     * @param t current time
+     * add newly birthed person to female or male population, depending on gender
+     * and schedule associated life events
+     *
+     * @param w populationModel.person.Person
+     */
+    private void addPerson(Woman w) {
+        eventList.addEvents(w);
+        populationF.put(w.getID(), w);
+    }
+
+    private void addPerson(Man m) {
+        eventList.addEvents(m);
+        populationM.put(m.getID(), m);
+    }
+
+    @Override
+    public boolean hasNext() {
+        return time < eventList.getDuration();
+    }
+
+
+    /**
+     * compute a time step and advance attribute "time" by 1
+     *
      * @return simulation statistics representing in a comma separated format
      */
-    public String step(int t) {
-        Event e = eventlist.getScheduledEvents(t);
+    @Override
+    public String next() {
+        Event e = eventList.getEvent(time);
         if (e != null) {
             // birth
             for (int i = 0; i < e.getBirths(); i++) {
-                if (rand.randomUnif() < 0.5) {
-                    Woman w = new Woman(t, getDeathRate(FEMALE), getEmigrationRate(FEMALE), getBirthRate(t));
+                if (randomUnif() < 0.5) {
+                    Woman w = new Woman(time, getDeathRateWomen(time), getEmigrationRateWomen(time), getBirthRate(time));
                     addPerson(w);
                 } else {
-                    Man m = new Man(t, getDeathRate(MALE), getEmigrationRate(MALE));
+                    Man m = new Man(time, getDeathRateMen(time), getEmigrationRateMen(time));
                     addPerson(m);
                 }
             }
 
             // immigrations
-            addImmigrations(t, e);
+            addImmigrations(time, e);
             for (int j = 0; j < e.getImmigrationsFemale(); j++) {
                 // TODO: add "age"? i.e. assume that person has age ~ N(30, 10)???
-                Woman w = new Woman(t, getDeathRate(FEMALE), getEmigrationRate(FEMALE), getBirthRate(t));
+                int birthYear = time - (int) randomNorm(30, 10);
+                Woman w = new Woman(birthYear, getDeathRateWomen(birthYear), getEmigrationRateWomen(birthYear), getBirthRate(birthYear));
                 addPerson(w);
             }
             for (int i = 0; i < e.getImmigrationsMale(); i++) {
-                Man m = new Man(t, getDeathRate(MALE), getEmigrationRate(MALE));
+                int birthYear = time - (int) randomNorm(30, 10);
+                Man m = new Man(birthYear, getDeathRateMen(birthYear), getEmigrationRateMen(birthYear));
                 addPerson(m);
             }
 
@@ -149,54 +171,49 @@ public class Simulation {
             populationM.keySet().removeAll(e.getDeathsMale());
 
             // todo check if immediately leaving entities show up in toString()
-            return makeLine(t, e);
+            time++;
+            return makeLine(time, e);
         } else {
-            return makeLine(t, new Event());
+            time++;
+            return makeLine(time, new Event());
         }
     }
 
     private String makeLine(int timeStamp, Event e) {
-       return String.format("%d, %d, %d, %s\n", timeStamp, populationF.size(), populationM.size(), e.toString());
-    }
-
-    /**
-     * @return comma separated column names
-     */
-    public static String getHeader() {
-        return String.format("time, populationF, populationM, %s", Event.getHeader());
-    }
-
-    // get static values
-
-    private int getInitialPopulationSize(boolean female) {
-        return p_init[female?0:1];
-    }
-
-    public int getMaxSteps() {
-        return timeSteps;
-    }
-
-    // get dynamic values
-    // todo: add linear dependency on time
-
-    private double getBirthRate(int t) {
-        return birthRate + coef_b * t;
-    }
-
-    private double getDeathRate(boolean female) {
-        return female?deathRates[0]:deathRates[1];
-    }
-
-    private double getEmigrationRate(boolean female) {
-        return female?emigrationRates[0]:emigrationRates[1];
+        return String.format("%d, %d, %d, %s\n", timeStamp, populationF.size(), populationM.size(), e.toString());
     }
 
     private void addImmigrations(int timestamp, Event e) {
         double probFemale = 0.5; // TODO: really 50:50?
         // todo: I don't get why immigration rate and emigration rates are so different :(
         while (cumulativeImmigrationTime < timestamp) {
-            cumulativeImmigrationTime += rand.randomExp(immRate);
-            e.addImmigration(rand.randomUnif() < probFemale);
+            cumulativeImmigrationTime += randomExp(getImmigrationRate(timestamp));
+            e.addImmigration(randomUnif() < probFemale);
         }
+    }
+
+    // get dynamic values
+    private double getDeathRateWomen(int t) {
+        return deathRateWomen + t * slopeDeathRateWomen;
+    }
+
+    private double getDeathRateMen(int t) {
+        return deathRateMen + t * slopeDeathRateMen;
+    }
+
+    private double getEmigrationRateWomen(int t) {
+        return emigrationRateWomen + t * slopeEmigrationRateWomen;
+    }
+
+    private double getEmigrationRateMen(int t) {
+        return emigrationRateMen + t * slopeEmigrationRateMen;
+    }
+
+    private double getBirthRate(int t) {
+        return birthRate + t * slopeBirthRate;
+    }
+
+    private double getImmigrationRate(int t) {
+        return immigrationRate + t * slopeImmigrationRate;
     }
 }

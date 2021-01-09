@@ -1,20 +1,33 @@
 package populationModel;
 
+import populationModel.person.Man;
 import populationModel.person.Person;
+import populationModel.person.Woman;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * holds information about Events, which are scheduled to happen within a time step
  */
 public class Event {
+    public static final String HEADER = "births, immigrationsF, immigrationsM, deathsF, deathsM, emigrationsF, emigrationsM";
     private int births = 0;
     private int immigrationsFemale = 0;
     private int immigrationsMale = 0;
-    private LinkedList<Integer> deathsFemale = new LinkedList();
-    private LinkedList<Integer> deathsMale = new LinkedList();
-    private LinkedList<Integer> emigrationsFemale = new LinkedList();
-    private LinkedList<Integer> emigrationsMale = new LinkedList();
+
+    private final List<Woman> deathsFemale;
+    private final List<Man> deathsMale;
+    private final List<Woman> emigrationsFemale;
+    private final List<Man> emigrationsMale;
+
+    public Event() {
+        emigrationsMale = new ArrayList<>();
+        deathsFemale = new ArrayList<>();
+        deathsMale = new ArrayList<>();
+        emigrationsFemale = new ArrayList<>();
+    }
 
     /**
      * increase number of scheduled births by 1
@@ -25,30 +38,33 @@ public class Event {
 
     /**
      * add scheduled death of person
-     * @param p populationModel.person.Person
+     *
+     * @param w populationModel.person.Person
      */
-    public void addDeath(Person p) {
-        if (p.isFemale()) {
-            deathsFemale.add(p.getID());
-        } else {
-            deathsMale.add(p.getID());
-        }
+    public void addDeath(Woman w) {
+        deathsFemale.add(w);
+    }
+
+    public void addDeath(Man p) {
+        deathsMale.add(p);
     }
 
     /**
      * add scheduled emigration of person
+     *
      * @param p populationModel.person.Person
      */
-    public void addEmigration(Person p) {
-        if (p.isFemale()) {
-            emigrationsFemale.add(p.getID());
-        } else {
-            emigrationsMale.add(p.getID());
-        }
+    public void addEmigration(Man p) {
+        emigrationsMale.add(p);
+    }
+
+    public void addEmigration(Woman p) {
+        emigrationsFemale.add(p);
     }
 
     /**
      * add scheduled immigration of person
+     *
      * @param female boolean specifying gender
      */
     public void addImmigration(boolean female) {
@@ -71,24 +87,20 @@ public class Event {
         return immigrationsMale;
     }
 
-    public LinkedList<Integer> getDeathsFemale() {
+    public List<Woman> getDeathsFemale() {
         return deathsFemale;
     }
 
-    public LinkedList<Integer> getDeathsMale() {
+    public List<Man> getDeathsMale() {
         return deathsMale;
     }
 
-    public LinkedList<Integer> getEmigrationsFemale() {
+    public List<Woman> getEmigrationsFemale() {
         return emigrationsFemale;
     }
 
-    public LinkedList<Integer> getEmigrationsMale() {
+    public List<Man> getEmigrationsMale() {
         return emigrationsMale;
-    }
-
-    public static String getHeader(){
-        return "births, immigrationsF, immigrationsM, deathsF, deathsM, emigrationsF, emigrationsM";
     }
 
     @Override
@@ -99,6 +111,6 @@ public class Event {
                 ", " + deathsFemale.size() +
                 ", " + deathsMale.size() +
                 ", " + emigrationsFemale.size() +
-                ", " + emigrationsMale.size() ;
+                ", " + emigrationsMale.size();
     }
 }

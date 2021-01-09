@@ -1,18 +1,18 @@
 package populationModel.person;
 
 import populationModel.Action;
-import populationModel.RandomGenerator;
 
 import java.util.ArrayList;
 
-public class Woman implements Person{
-    public static int femaleID = 0;
-    private static RandomGenerator rand = new RandomGenerator();
+import static populationModel.util.RandomGenerator.randomExp;
 
-    private int id;
-    private Action exit;
-    private int exitTime;
-    private ArrayList<Integer> birthTimes = new ArrayList<Integer>();
+public class Woman implements Person{
+    private static int femaleID = 0;
+
+    private final int id;
+    private final Action exit;
+    private final int exitTime;
+    private final ArrayList<Integer> birthTimes = new ArrayList<Integer>();
 
     /**
      * create a new woman and schedule her life events
@@ -25,8 +25,8 @@ public class Woman implements Person{
         id = femaleID;
         femaleID++;
 
-        double death = rand.randomExp(deathRate);
-        double emigration = rand.randomExp(emRate);
+        double death = randomExp(deathRate);
+        double emigration = randomExp(emRate);
         if (death < emigration) {
             exit = Action.DEATH;
             exitTime = timestamp + (int)death;
@@ -58,12 +58,12 @@ public class Woman implements Person{
 
     private void scheduleBirths(int timestamp, double birthRate) {
         // get time to first birth
-        double totalTime = rand.randomExp(birthRate);
+        double totalTime = randomExp(birthRate);
 
         // while next birth happens while woman in system: schedule next birth
         while (totalTime < exitTime-timestamp) {
             birthTimes.add(timestamp + (int)totalTime);
-            totalTime += rand.randomExp(birthRate);
+            totalTime += randomExp(birthRate);
         }
         birthTimes.trimToSize();
     }

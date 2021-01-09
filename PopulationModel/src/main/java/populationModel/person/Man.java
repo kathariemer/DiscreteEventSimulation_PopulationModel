@@ -1,12 +1,12 @@
 package populationModel.person;
 
 import populationModel.Action;
-import populationModel.RandomGenerator;
+import populationModel.util.RandomGenerator;
+
+import static populationModel.util.RandomGenerator.randomExp;
 
 public class Man implements Person{
     public static int maleID = 0;
-    private static RandomGenerator rand = new RandomGenerator();
-
     private int id;
     private Action exit;
     private int exitTime;
@@ -21,8 +21,8 @@ public class Man implements Person{
         id = maleID;
         maleID++;
 
-        double death = rand.randomExp(deathRate);
-        double emigration = rand.randomExp(emRate);
+        double death = randomExp(deathRate);
+        double emigration = randomExp(emRate);
         if (death < emigration) {
             exit = Action.DEATH;
             exitTime = timestamp + (int)death;
@@ -31,6 +31,7 @@ public class Man implements Person{
             exitTime = timestamp + (int)emigration;
         }
     }
+
 
     @Override
     public int getID() {

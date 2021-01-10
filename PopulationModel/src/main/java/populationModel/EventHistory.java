@@ -79,6 +79,12 @@ public class EventHistory {
         return null;
     }
 
+    public void deleteTimeUnit(int t) {
+        if (t >= 0 && t < eventList.length) {
+            eventList[t] = null;
+        }
+    }
+
     public int getDuration() {
         return eventList.length;
     }

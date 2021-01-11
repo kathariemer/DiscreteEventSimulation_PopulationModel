@@ -1,18 +1,22 @@
 timeSteps = 240
 
-init_f = 1000000
-init_m = 1000000
+init_f = 10000
+init_m = 10000
 
 inv_deathRate_f = 81.4
 inv_deathRate_m = 79.8
 inv_emRate_f = 120
 inv_emRate_m = 120
 inv_birthRate = 20.0
-inv_immRate = 0.004
 
 slope_deathRate_f = 0
 slope_deathRate_m = 0
 slope_emRate_f = 0
 slope_emRate_m = 0
 slope_birthRate = 0
+
+inv_immRate = 0.004
 slope_immRate = 0
+imm_prop_female = 0.5
+imm_mean_age = 30
+imm_sd_age = 10

@@ -1,7 +1,7 @@
 package populationModel.person;
 
 import populationModel.Action;
-import populationModel.util.SimulationParameters;
+import populationModel.util.PopulationParameters;
 
 import java.util.Objects;
 
@@ -19,7 +19,7 @@ public class Man implements Person{
      * @param timestamp time of this person's birth
      * @param params SimulationParameters
      */
-    public Man(int timestamp, SimulationParameters params) {
+    public Man(int timestamp, PopulationParameters params) {
         id = maleID;
         maleID++;
 

@@ -1,6 +1,6 @@
 package populationModel.util;
 
-public class SimulationParameters {
+public class PopulationParameters {
 
     // values at time 0 - intercept
     private final double deathRate;
@@ -23,7 +23,7 @@ public class SimulationParameters {
      * @param slopeEmigrationRate coefficient for emigration rate as (affine) linear function in t
      * @param slopeBirthRate coefficient for birthrate as (affine) linear function in t
      */
-    public SimulationParameters(double deathRate, double slopeDeathRate,
+    public PopulationParameters(double deathRate, double slopeDeathRate,
                                 double emigrationRate, double slopeEmigrationRate,
                                 double birthRate, double slopeBirthRate) {
         this.deathRate = deathRate;
@@ -41,7 +41,7 @@ public class SimulationParameters {
      * @param slopeDeathRate coefficient for death rate as (affine) linear function in t
      * @param slopeEmigrationRate coefficient for emigration rate as (affine) linear function in t
      */
-    public SimulationParameters(double deathRate, double slopeDeathRate,
+    public PopulationParameters(double deathRate, double slopeDeathRate,
                                 double emigrationRate, double slopeEmigrationRate) {
         this.deathRate = deathRate;
         this.emigrationRate = emigrationRate;
@@ -49,10 +49,6 @@ public class SimulationParameters {
         this.slopeEmigrationRate = slopeEmigrationRate;
         birthRate = UNDEFINED_BIRTHRATE;
         slopeBirthRate = 0;
-    }
-
-    public static double affineLinear(int t, double intercept, double slope) {
-        return intercept + t * slope;
     }
 
     // get dynamic values

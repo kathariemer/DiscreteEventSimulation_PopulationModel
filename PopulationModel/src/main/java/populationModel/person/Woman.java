@@ -1,7 +1,7 @@
 package populationModel.person;
 
 import populationModel.Action;
-import populationModel.util.SimulationParameters;
+import populationModel.util.PopulationParameters;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -15,14 +15,14 @@ public class Woman implements Person{
     private final Action exit;
     private final int exitTime;
     private final int birthTime;
-    private final ArrayList<Integer> birthTimes = new ArrayList<Integer>();
+    private final ArrayList<Integer> birthTimes = new ArrayList<>();
 
     /**
      * create a new woman and schedule her life events
      * @param timestamp timestamp of creation
      * @param params SimulationParameters with initialized birth rate
      */
-    public Woman(int timestamp, SimulationParameters params) {
+    public Woman(int timestamp, PopulationParameters params) {
         id = femaleID;
         femaleID++;
 

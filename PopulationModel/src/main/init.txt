@@ -15,7 +15,7 @@ slope_emRate_f = 0
 slope_emRate_m = 0
 slope_birthRate = 0
 
-inv_immRate = 0.004
+inv_immRate = 0.1
 slope_immRate = 0
 imm_prop_female = 0.5
 imm_mean_age = 30

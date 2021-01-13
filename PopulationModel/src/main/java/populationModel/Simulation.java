@@ -91,7 +91,7 @@ public class Simulation implements Iterator<String> {
      * @param sizeM number of men
      */
     private void initPopulation(int time0, int sizeF, int sizeM) {
-        cumulativeImmigrationTime = (float) time0 - 1;
+        cumulativeImmigrationTime = (float) time0 - 1 + randomExp(immigrationParameters.getImmigrationRate(time0));
         // todo: maybe change people's ages
         for (int i = 0; i < sizeF; i++) {
             Woman w = new Woman(time0, womenParams);
@@ -198,7 +198,7 @@ public class Simulation implements Iterator<String> {
         // compute how many immigrations happen in timestep
         double lambda = immigrationParameters.getImmigrationRate(timestamp);
 
-        cumulativeImmigrationTime += randomExp(lambda);
+        //cumulativeImmigrationTime += randomExp(lambda);
         while (cumulativeImmigrationTime < timestamp) {
             if (randomUnif() < immigrationParameters.getProportionF()) {
                 e.scheduleWomanImmigration();

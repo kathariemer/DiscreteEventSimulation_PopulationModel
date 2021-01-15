@@ -1,0 +1,3 @@
+date	vsn	info
+jan 15	1.4	Add more setters for matlab-interface, add static indices which explain the array returned by step()
+jan 15	1.3	Add method for matlab invocation. First methods to adjust simulation rates (birthrate)

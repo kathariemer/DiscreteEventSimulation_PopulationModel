@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class TimeUnit {
     public static final String HEADER = "birthsF, birthsM, immigrationsF, immigrationsM, deathsF, deathsM, emigrationsF, emigrationsM";
+    public static final int STATCOUNT = 8;
     private int birthsFemale = 0;
     private int birthsMale = 0;
     private int immigrationsFemale = 0;

@@ -3,11 +3,9 @@ package populationModel;
 import org.apache.commons.cli.*;
 
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Calendar;
-import java.util.Scanner;
 
 public class Main {
     private static void usage() {
@@ -71,8 +69,15 @@ public class Main {
 
         // run simulation
         while(sim.hasNext()) {
-            String output = sim.next();
-            printWriter.printf(output);
+            int[] res = sim.next();
+            // instead of packing apache's stringutils into the char ... i typed this out -.-
+            printWriter.printf("%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d\n", res[0],
+                    res[1], res[2],
+                    res[3], res[4],
+                    res[5], res[6],
+                    res[7], res[8],
+                    res[9], res[10]
+                    );
         }
         System.err.println("Run time: " + (System.currentTimeMillis() - tic)/1000.0 + " seconds");
         printWriter.close();

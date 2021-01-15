@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 import static populationModel.util.RandomGenerator.*;
 
-public class Simulation implements Iterator<String> {
+public class Simulation implements Iterator<int[]> {
     public static final String HEADER = String.format("time, populationF, populationM, %s", TimeUnit.HEADER);
 
     // time <= duration
@@ -136,9 +136,10 @@ public class Simulation implements Iterator<String> {
      * @return simulation statistics representing in a comma separated format
      */
     @Override
-    public String next() {
+    public int[] next() {
         TimeUnit e = eventList.getTimeUnit(time);
-        // delete history for performance reasons
+        // delete history for performance reasons - however THAT MEANS THAT EVENTS
+        // SCHEDULED AT THE CURRENT TIME UNIT CANNOT BE ADDED
         eventList.deleteTimeUnit(time);
         if (e != null) {
             addImmigrations(time, e);
@@ -172,11 +173,9 @@ public class Simulation implements Iterator<String> {
             populationM.removeAll(e.getDeathsMale());
 
             // todo check if immediately leaving entities show up in toString()
-            time++;
-            return makeLine(time, e);
+            return currentStats(time++, e);
         } else {
-            time++;
-            return makeLine(time, new TimeUnit());
+            return currentStats(time++, new TimeUnit());
         }
 
     }
@@ -206,6 +205,30 @@ public class Simulation implements Iterator<String> {
      */
     private String makeLine(int timeStamp, TimeUnit e) {
         return String.format("%d, %d, %d, %s\n", timeStamp, populationF.size(), populationM.size(), e.toString());
+    }
+
+    private int[] currentStats(int timeStamp) {
+        int[] stats = new int[TimeUnit.STATCOUNT + 3];
+        stats[ 0] = timeStamp;
+        stats[ 1] = populationF.size();
+        stats[ 2] = populationM.size();
+        return stats;
+    }
+
+    private int[] currentStats(int timeStamp, TimeUnit e) {
+        int[] stats = new int[TimeUnit.STATCOUNT + 3];
+        stats[ 0] = timeStamp;
+        stats[ 1] = populationF.size();
+        stats[ 2] = populationM.size();
+        stats[ 3] = e.getBirthsFemale();
+        stats[ 4] = e.getBirthsMale();
+        stats[ 5] = e.getImmigrationsFemale();
+        stats[ 6] = e.getImmigrationsMale();
+        stats[ 7] = e.getDeathsFemale().size();
+        stats[ 8] = e.getDeathsMale().size();
+        stats[ 9] = e.getEmigrationsFemale().size();
+        stats[10] = e.getEmigrationsMale().size();
+        return stats;
     }
 
     /**

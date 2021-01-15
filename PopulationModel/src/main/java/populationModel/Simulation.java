@@ -33,7 +33,7 @@ public class Simulation implements Iterator<int[]> {
     /**
      * read parameters from input file, where each line starts with the key name, followed by an equality symbol and
      * then the value. In order to ensure correct parsing, no punctuation is accepted.
-     *
+     * <p>
      * save all parameters for the simulation and initialize the population
      *
      * @param inputFile path to input file
@@ -88,9 +88,9 @@ public class Simulation implements Iterator<int[]> {
     /**
      * after changed parameters, re-initialize the simulation
      * Reset time = 0
-     *       population = new HashSet
-     *       eventList = new EventHistory
-     *       create initial population
+     * population = new HashSet
+     * eventList = new EventHistory
+     * create initial population
      */
     public void reset() {
         time = 0;
@@ -102,6 +102,7 @@ public class Simulation implements Iterator<int[]> {
 
     /**
      * initialize population
+     *
      * @param sizeF number of women
      * @param sizeM number of men
      */
@@ -138,9 +139,6 @@ public class Simulation implements Iterator<int[]> {
     @Override
     public int[] next() {
         TimeUnit e = eventList.getTimeUnit(time);
-        // delete history for performance reasons - however THAT MEANS THAT EVENTS
-        // SCHEDULED AT THE CURRENT TIME UNIT CANNOT BE ADDED
-        eventList.deleteTimeUnit(time);
         if (e != null) {
             addImmigrations(time, e);
 
@@ -172,16 +170,19 @@ public class Simulation implements Iterator<int[]> {
             populationF.removeAll(e.getDeathsFemale());
             populationM.removeAll(e.getDeathsMale());
 
-            // todo check if immediately leaving entities show up in toString()
-            return currentStats(time++, e);
         } else {
-            return currentStats(time++, new TimeUnit());
+            e = new TimeUnit();
         }
-
+        // todo check if immediately leaving entities show up in toString()
+        // delete history for performance reasons - however THAT MEANS THAT EVENTS
+        // SCHEDULED AT THE CURRENT TIME UNIT CANNOT BE ADDED
+        eventList.deleteTimeUnit(time);
+        return currentStats(time++, e);
     }
 
     /**
      * add woman to population and add life events to eventList
+     *
      * @param w woman
      */
     private void integrateWoman(Woman w) {
@@ -191,6 +192,7 @@ public class Simulation implements Iterator<int[]> {
 
     /**
      * add man to population and add life event to event list
+     *
      * @param m man
      */
     private void integrateMan(Man m) {
@@ -200,7 +202,7 @@ public class Simulation implements Iterator<int[]> {
 
     /**
      * @param timeStamp current time
-     * @param e events happening at time timeStamp
+     * @param e         events happening at time timeStamp
      * @return line of comma-separated statistics
      */
     private String makeLine(int timeStamp, TimeUnit e) {
@@ -209,32 +211,33 @@ public class Simulation implements Iterator<int[]> {
 
     private int[] currentStats(int timeStamp) {
         int[] stats = new int[TimeUnit.STATCOUNT + 3];
-        stats[ 0] = timeStamp;
-        stats[ 1] = populationF.size();
-        stats[ 2] = populationM.size();
+        stats[0] = timeStamp;
+        stats[1] = populationF.size();
+        stats[2] = populationM.size();
         return stats;
     }
 
     private int[] currentStats(int timeStamp, TimeUnit e) {
         int[] stats = new int[TimeUnit.STATCOUNT + 3];
-        stats[ 0] = timeStamp;
-        stats[ 1] = populationF.size();
-        stats[ 2] = populationM.size();
-        stats[ 3] = e.getBirthsFemale();
-        stats[ 4] = e.getBirthsMale();
-        stats[ 5] = e.getImmigrationsFemale();
-        stats[ 6] = e.getImmigrationsMale();
-        stats[ 7] = e.getDeathsFemale().size();
-        stats[ 8] = e.getDeathsMale().size();
-        stats[ 9] = e.getEmigrationsFemale().size();
+        stats[0] = timeStamp;
+        stats[1] = populationF.size();
+        stats[2] = populationM.size();
+        stats[3] = e.getBirthsFemale();
+        stats[4] = e.getBirthsMale();
+        stats[5] = e.getImmigrationsFemale();
+        stats[6] = e.getImmigrationsMale();
+        stats[7] = e.getDeathsFemale().size();
+        stats[8] = e.getDeathsMale().size();
+        stats[9] = e.getEmigrationsFemale().size();
         stats[10] = e.getEmigrationsMale().size();
         return stats;
     }
 
     /**
      * compute number of immigrations in TimeUnit e
+     *
      * @param timestamp current time
-     * @param e time unit
+     * @param e         time unit
      */
     private void addImmigrations(int timestamp, TimeUnit e) {
         // compute how many immigrations happen in timestep

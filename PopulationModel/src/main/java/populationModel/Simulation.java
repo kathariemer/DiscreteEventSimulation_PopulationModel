@@ -254,27 +254,36 @@ public class Simulation implements Iterator<int[]> {
         }
     }
 
-    public List<Integer> getAgeF(int t) {
-        return populationF.stream().map(w -> t - w.getBirthTime()).collect(Collectors.toList());
+    // setters
+
+    public boolean setDuration(int t) {
+        boolean b = !hasNext();
+        if (b) {
+            duration = t;
+        }
+        return b;
     }
 
-    public List<Integer> getAgeM(int t) {
-        return populationM.stream().map(m -> t - m.getBirthTime()).collect(Collectors.toList());
+    public boolean setFemaleInitialPopulationSize(int size) {
+        boolean b = !hasNext();
+        if (b) {
+            womenParams.setInitialPopulationSize(size);
+        }
+        return b;
+    }
+
+    public boolean setMaleInitialPopulationSize(int size) {
+        boolean b = !hasNext();
+        if (b) {
+            menParams.setInitialPopulationSize(size);
+        }
+        return b;
     }
 
     public boolean setBirthrate(double rate) {
         boolean b = !hasNext();
         if (b) {
             womenParams.setBirthRate(rate);
-        }
-        return b;
-    }
-
-    public boolean setEmigrationRate(double rate) {
-        boolean b = !hasNext();
-        if (b) {
-            womenParams.setEmigrationRate(rate);
-            menParams.setEmigrationRate(rate);
         }
         return b;
     }
@@ -303,26 +312,11 @@ public class Simulation implements Iterator<int[]> {
         return b;
     }
 
-    public boolean setFemaleInitialPopulationSize(int size) {
+    public boolean setEmigrationRate(double rate) {
         boolean b = !hasNext();
         if (b) {
-            womenParams.setInitialPopulationSize(size);
-        }
-        return b;
-    }
-
-    public boolean setMaleInitialPopulationSize(int size) {
-        boolean b = !hasNext();
-        if (b) {
-            menParams.setInitialPopulationSize(size);
-        }
-        return b;
-    }
-
-    public boolean setDuration(int t) {
-        boolean b = !hasNext();
-        if (b) {
-            duration = t;
+            womenParams.setEmigrationRate(rate);
+            menParams.setEmigrationRate(rate);
         }
         return b;
     }

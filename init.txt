@@ -3,20 +3,19 @@ timeSteps = 1
 init_f = 4285442
 init_m = 4066201
 
-inv_deathRate_f = 107.3
-slope_deathRate_f = 0
+inv_immRate = 8.87382e-06
+inv_deathRate_f = 107.0
+inv_deathRate_m = 110.8
+inv_emRate = 88
+inv_birthRate = 53.86
 
-inv_deathRate_m = 111.284
-slope_deathRate_m = 0
 
-inv_birthRate = 38.0
-slope_birthRate = 0
-
-inv_emRate = 120
-slope_emRate = 0
-
-inv_immRate = 8.024459e-06
-slope_immRate = 0
 imm_prop_female = 0.5
 imm_mean_age = 30
 imm_sd_age = 10
+
+slope_immRate = 0
+slope_emRate = 0
+slope_birthRate = 0
+slope_deathRate_f = 0
+slope_deathRate_m = 0

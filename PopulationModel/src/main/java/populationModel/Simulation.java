@@ -270,6 +270,55 @@ public class Simulation implements Iterator<int[]> {
         return b;
     }
 
+    public boolean setEmigrationRate(double rate) {
+        boolean b = !hasNext();
+        if (b) {
+            womenParams.setEmigrationRate(rate);
+            menParams.setEmigrationRate(rate);
+        }
+        return b;
+    }
+
+    public boolean setImmigrationRate(double rate) {
+        boolean b = !hasNext();
+        if (b) {
+            immigrationParameters.setRate(rate);
+        }
+        return b;
+    }
+
+    public boolean setFemaleDeathRate(double rate) {
+        boolean b = !hasNext();
+        if (b) {
+            womenParams.setDeathRate(rate);
+        }
+        return b;
+    }
+
+    public boolean setMaleDeathRate(double rate) {
+        boolean b = !hasNext();
+        if (b) {
+            menParams.setDeathRate(rate);
+        }
+        return b;
+    }
+
+    public boolean setFemaleInitialPopulationSize(int size) {
+        boolean b = !hasNext();
+        if (b) {
+            womenParams.setInitialPopulationSize(size);
+        }
+        return b;
+    }
+
+    public boolean setMaleInitialPopulationSize(int size) {
+        boolean b = !hasNext();
+        if (b) {
+            menParams.setInitialPopulationSize(size);
+        }
+        return b;
+    }
+
     public boolean setDuration(int t) {
         boolean b = !hasNext();
         if (b) {

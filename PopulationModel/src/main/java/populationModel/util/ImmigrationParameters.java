@@ -3,8 +3,8 @@ package populationModel.util;
 import static populationModel.util.RandomGenerator.randomNorm;
 
 public class ImmigrationParameters {
-    private final double initalRate;
-    private final double slope;
+    private double initalRate;
+    private double slope;
 
     private final double proportionF;
     private final double meanAge;
@@ -33,5 +33,13 @@ public class ImmigrationParameters {
 
     public double getProportionF() {
         return proportionF;
+    }
+
+    public void setRate(double rate) {
+        this.initalRate = rate;
+    }
+
+    public void setSlope(double slope) {
+        this.slope = slope;
     }
 }

@@ -9,7 +9,7 @@ import java.io.IOException;
  */
 public class ConfigurableSimulation {
     private final Simulation simulation;
-    public static final String HEADER = Simulation.HEADER;
+    public static final String[] HEADER = Simulation.HEADER.split(", ");
     public static final int IDX_TIME = 1, IDX_POP_F = 2, IDX_POP_M = 3, IDX_BIRTH_F = 4, IDX_BIRTH_M = 5;
     public static final int IDX_IMMI_F = 6, IDX_IMMI_M = 7, IDX_DEATH_F = 8, IDX_DEATH_M = 9, IDX_EMI_F = 10, IDX_EMI_M = 11;
 

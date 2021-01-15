@@ -25,6 +25,16 @@ public class ConfigurableSimulation {
         return res;
     }
 
+    public int[] step(int k) {
+        int[] res = null;
+        for (int i = 0; i < k; i++) {
+            if (simulation.hasNext()) {
+                res = simulation.next();
+            }
+        }
+        return res;
+    }
+
     public void resetFemaleInitialPopulation(int size) {
         if (simulation.setFemaleInitialPopulationSize(size)) {
             simulation.reset();

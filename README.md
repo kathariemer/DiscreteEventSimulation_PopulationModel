@@ -26,12 +26,13 @@ It shows how to use MATLAB as a shell and runs the Java program's main method.
 
 A Java/Maven Project
 
-* Usage: ```program [-i <path_to_input_file> -o <path_to_output_file>]```
+* Usage: ```program [-i <path_to_input_file> -o <path_to_output_file> -r <number_of_repetitions>]```
     + if no input file is specified, the project's example file is used
     + if no output file is specified, the program prints to stdout
+    + if no repetition count is specified, the program loops through the simulation once
     + the simulation's runtime is printed to stderr (in seconds)
 * Input file: specify parameters in format ```parameterName = parameterValue```
-    + example parameter file in ```PopulationModel/src/main/init.txt```
+    + example parameter file in ```PopulationModel/init.txt```
 * Output: population statistics in csv-format
    + 1st line: Date of program execution
    + 2nd line: csv header

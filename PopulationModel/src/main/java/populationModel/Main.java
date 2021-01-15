@@ -18,17 +18,19 @@ public class Main {
         final Options options = new Options();
         options.addOption(new Option("i", "input", true, "Input file path, if not specified use standard input."));
         options.addOption(new Option("o", "output", true, "Output file path, if not specified use standard output."));
+        options.addOption(new Option("r", "repetitions", true, "Number of time the simulation should be repeated. Default = 1."));
 
         CommandLineParser parser = new DefaultParser();
 
         String inputPath;
         PrintWriter printWriter;
+        int reps = 1;
         try {
             CommandLine cmd = parser.parse(options, args);
             if (cmd.hasOption("i")) {
                 inputPath = cmd.getOptionValue("i");
             } else {
-                inputPath = "src/main/init.txt";
+                inputPath = "../init.txt";
                 System.err.println("Using example parameters.");
                 //usage();
                 //return;
@@ -38,6 +40,9 @@ public class Main {
                 printWriter = new PrintWriter(outputPath);
             } else {
                 printWriter = new PrintWriter(System.out);
+            }
+            if (cmd.hasOption("r")) {
+                reps = Integer.parseInt(cmd.getOptionValue("r"));
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -56,7 +61,7 @@ public class Main {
         try {
             sim = new Simulation(inputPath);
         } catch (IOException e) {
-            System.err.println("bad input file");
+            System.err.printf("Bad input file %s. \nCurrent directory: %s\n", inputPath, System.getProperty("user.dir"));
             System.exit(1);
         } catch (NumberFormatException e) {
             System.err.println("bad input numbers");
@@ -68,18 +73,21 @@ public class Main {
         printWriter.println(Simulation.HEADER);
 
         // run simulation
-        while(sim.hasNext()) {
-            int[] res = sim.next();
-            // instead of packing apache's stringutils into the char ... i typed this out -.-
-            printWriter.printf("%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d\n", res[0],
-                    res[1], res[2],
-                    res[3], res[4],
-                    res[5], res[6],
-                    res[7], res[8],
-                    res[9], res[10]
-                    );
+        for (int i = 0; i < reps; i++) {
+            sim.reset();
+            while (sim.hasNext()) {
+                int[] res = sim.next();
+                // instead of packing apache's stringutils into the char ... i typed this out -.-
+                printWriter.printf("%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d\n", res[0],
+                        res[1], res[2],
+                        res[3], res[4],
+                        res[5], res[6],
+                        res[7], res[8],
+                        res[9], res[10]
+                );
+            }
         }
-        System.err.println("Run time: " + (System.currentTimeMillis() - tic)/1000.0 + " seconds");
+        System.err.println("Run time: " + (System.currentTimeMillis() - tic) / 1000.0 + " seconds");
         printWriter.close();
     }
 }

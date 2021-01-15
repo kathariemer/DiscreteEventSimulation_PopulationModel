@@ -15,11 +15,14 @@ import static populationModel.util.RandomGenerator.*;
 public class Simulation implements Iterator<String> {
     public static final String HEADER = String.format("time, populationF, populationM, %s", TimeUnit.HEADER);
 
+    // time <= duration
     private int time;
-    private final EventHistory eventList;
+    // fixed value
+    private int duration;
+    private EventHistory eventList;
 
-    private final Set<Woman> populationF;
-    private final Set<Man> populationM;
+    private Set<Woman> populationF;
+    private Set<Man> populationM;
 
     private final PopulationParameters womenParams;
     private final PopulationParameters menParams;
@@ -43,10 +46,7 @@ public class Simulation implements Iterator<String> {
         inputStream.close();
 
         // init parameters
-        int initialPopulationSizeWomen = Integer.parseInt(properties.getProperty("init_f"));
-        populationF = new HashSet<>(initialPopulationSizeWomen);
-        int initialPopulationSizeMen = Integer.parseInt(properties.getProperty("init_m"));
-        populationM = new HashSet<>(initialPopulationSizeMen);
+        duration = Integer.parseInt(properties.getProperty("timeSteps"));
 
         // immigration parameters
         double immigrationRate = 1 / Double.parseDouble(properties.getProperty("inv_immRate"));
@@ -58,39 +58,55 @@ public class Simulation implements Iterator<String> {
                 propF, meanAge, sdAge);
 
         // population parameters women
+        int initialPopulationSizeWomen = Integer.parseInt(properties.getProperty("init_f"));
         double deathRateWomen = 1 / Double.parseDouble(properties.getProperty("inv_deathRate_f"));
         double slopeDeathRateWomen = Double.parseDouble(properties.getProperty("slope_deathRate_f"));
-        double emigrationRateWomen = 1 / Double.parseDouble(properties.getProperty("inv_emRate_f"));
-        double slopeEmigrationRateWomen = Double.parseDouble(properties.getProperty("slope_emRate_f"));
+        double emigrationRateWomen = 1 / Double.parseDouble(properties.getProperty("inv_emRate"));
+        double slopeEmigrationRateWomen = Double.parseDouble(properties.getProperty("slope_emRate"));
         double birthRate = 1 / Double.parseDouble(properties.getProperty("inv_birthRate"));
         double slopeBirthRate = Double.parseDouble(properties.getProperty("slope_birthRate"));
 
-        womenParams = new PopulationParameters(deathRateWomen, slopeDeathRateWomen,
+        womenParams = new PopulationParameters(initialPopulationSizeWomen,
+                deathRateWomen, slopeDeathRateWomen,
                 emigrationRateWomen, slopeEmigrationRateWomen,
                 birthRate, slopeBirthRate);
 
         // population parameters men
+        int initialPopulationSizeMen = Integer.parseInt(properties.getProperty("init_m"));
         double deathRateMen = 1 / Double.parseDouble(properties.getProperty("inv_deathRate_m"));
         double slopeDeathRateMen = Double.parseDouble(properties.getProperty("slope_deathRate_m"));
-        double emigrationRateMen = 1 / Double.parseDouble(properties.getProperty("inv_emRate_m"));
-        double slopeEmigrationRateMen = Double.parseDouble(properties.getProperty("slope_emRate_m"));
+        double emigrationRateMen = 1 / Double.parseDouble(properties.getProperty("inv_emRate"));
+        double slopeEmigrationRateMen = Double.parseDouble(properties.getProperty("slope_emRate"));
 
-        menParams = new PopulationParameters(deathRateMen, slopeDeathRateMen,
+        menParams = new PopulationParameters(initialPopulationSizeMen,
+                deathRateMen, slopeDeathRateMen,
                 emigrationRateMen, slopeEmigrationRateMen);
 
-        int duration = Integer.parseInt(properties.getProperty("timeSteps"));
-        eventList = new EventHistory(duration);
-        initPopulation(0, initialPopulationSizeWomen, initialPopulationSizeMen);
+        reset();
     }
 
+    /**
+     * after changed parameters, re-initialize the simulation
+     * Reset time = 0
+     *       population = new HashSet
+     *       eventList = new EventHistory
+     *       create initial population
+     */
+    public void reset() {
+        time = 0;
+        populationF = new HashSet<>(womenParams.getInitialPopulationSize());
+        populationM = new HashSet<>(menParams.getInitialPopulationSize());
+        eventList = new EventHistory(duration);
+        initPopulation(womenParams.getInitialPopulationSize(), menParams.getInitialPopulationSize());
+    }
 
     /**
      * initialize population
-     * @param time0 starting time
      * @param sizeF number of women
      * @param sizeM number of men
      */
-    private void initPopulation(int time0, int sizeF, int sizeM) {
+    private void initPopulation(int sizeF, int sizeM) {
+        int time0 = 0;
         cumulativeImmigrationTime = (float) time0 - 1 + randomExp(immigrationParameters.getImmigrationRate(time0));
         // todo: maybe change people's ages
         for (int i = 0; i < sizeF; i++) {
@@ -108,6 +124,9 @@ public class Simulation implements Iterator<String> {
 
     @Override
     public boolean hasNext() {
+        // don't compare with attribute duration, which might
+        // have changed already in preparation for a
+        // new simulation run
         return time < eventList.getDuration();
     }
 
@@ -215,5 +234,21 @@ public class Simulation implements Iterator<String> {
 
     public List<Integer> getAgeM(int t) {
         return populationM.stream().map(m -> t - m.getBirthTime()).collect(Collectors.toList());
+    }
+
+    public boolean setBirthrate(double rate) {
+        boolean b = !hasNext();
+        if (b) {
+            womenParams.setBirthRate(rate);
+        }
+        return b;
+    }
+
+    public boolean setDuration(int t) {
+        boolean b = !hasNext();
+        if (b) {
+            duration = t;
+        }
+        return b;
     }
 }

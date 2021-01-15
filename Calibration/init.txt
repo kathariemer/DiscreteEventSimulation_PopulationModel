@@ -1,19 +1,19 @@
-timeSteps = 12
+timeSteps = 5
 
-init_f = 1000
-init_m = 1000
+init_f = 10000
+init_m = 10000
 
 inv_deathRate_f = 81.4
-inv_deathRate_m = 79.8
-inv_emRate_f = 100
-inv_emRate_m = 100
-inv_birthRate = 50.0
-
 slope_deathRate_f = 0
+
+inv_deathRate_m = 79.8
 slope_deathRate_m = 0
-slope_emRate_f = 0
-slope_emRate_m = 0
+
+inv_birthRate = 20.0
 slope_birthRate = 0
+
+inv_emRate = 120
+slope_emRate = 0
 
 inv_immRate = 0.1
 slope_immRate = 0

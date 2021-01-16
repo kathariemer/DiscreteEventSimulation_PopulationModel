@@ -3,7 +3,7 @@ timeSteps = 1
 init_f = 4285442
 init_m = 4066201
 
-inv_immRate = 8.87382e-06
+immRate = 112691
 inv_deathRate_f = 107.0
 inv_deathRate_m = 110.8
 inv_emRate = 88

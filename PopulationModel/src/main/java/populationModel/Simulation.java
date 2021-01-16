@@ -49,7 +49,7 @@ public class Simulation implements Iterator<int[]> {
         duration = Integer.parseInt(properties.getProperty("timeSteps"));
 
         // immigration parameters
-        double immigrationRate = 1 / Double.parseDouble(properties.getProperty("inv_immRate"));
+        double immigrationRate = Double.parseDouble(properties.getProperty("immRate"));
         double slopeImmigrationRate = Double.parseDouble(properties.getProperty("slope_immRate"));
         double propF = Double.parseDouble(properties.getProperty("imm_prop_female"));
         double meanAge = Double.parseDouble(properties.getProperty("imm_mean_age"));

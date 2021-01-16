@@ -31,10 +31,10 @@ public class Woman implements Person{
         double emigration = randomExp(params.getEmigrationRate(timestamp));
         if (death < emigration) {
             exit = Action.DEATH;
-            exitTime = timestamp + (int)death;
+            exitTime = timestamp + (int)(0.5+death);
         } else {
             exit = Action.EMIGRATION;
-            exitTime = timestamp + (int)emigration;
+            exitTime = timestamp + (int)(0.5+emigration);
         }
 
         // update birthTimes ArrayList:

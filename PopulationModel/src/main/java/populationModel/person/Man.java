@@ -28,10 +28,10 @@ public class Man implements Person{
         double emigration = randomExp(params.getEmigrationRate(timestamp));
         if (death < emigration) {
             exit = Action.DEATH;
-            exitTime = timestamp + (int)death;
+            exitTime = timestamp + (int)(death+0.5);
         } else {
             exit = Action.EMIGRATION;
-            exitTime = timestamp + (int)emigration;
+            exitTime = timestamp + (int)(emigration+0.5);
         }
     }
 

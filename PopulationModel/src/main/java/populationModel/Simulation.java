@@ -46,17 +46,17 @@ public class Simulation implements Iterator<int[]> {
         inputStream.close();
 
 
-        String fieldName = "timeSteps";
+        String fieldName = "time_steps";
         String propertyValue = properties.getProperty(fieldName);
         try {
             // init parameters
             duration = Integer.parseInt(propertyValue);
 
             // immigration parameters
-            propertyValue = properties.getProperty(fieldName = "immRate");
+            propertyValue = properties.getProperty(fieldName = "lambda_immi");
             double immigrationRate = Double.parseDouble(propertyValue);
 
-            propertyValue = properties.getProperty(fieldName = "slope_immRate");
+            propertyValue = properties.getProperty(fieldName = "slope_immi_rate");
             double slopeImmigrationRate = Double.parseDouble(propertyValue);
             propertyValue = properties.getProperty(fieldName = "imm_prop_female", "0.5");
             double propF = Double.parseDouble(propertyValue);
@@ -71,17 +71,17 @@ public class Simulation implements Iterator<int[]> {
 
             propertyValue = properties.getProperty(fieldName = "init_f");
             int initialPopulationSizeWomen = Integer.parseInt(propertyValue);
-            propertyValue = properties.getProperty(fieldName = "inv_deathRate_f");
+            propertyValue = properties.getProperty(fieldName = "mu_death_f");
             double deathRateWomen = 1 / Double.parseDouble(propertyValue);
-            propertyValue = properties.getProperty(fieldName = "slope_deathRate_f");
+            propertyValue = properties.getProperty(fieldName = "slope_death_rate_f");
             double slopeDeathRateWomen = Double.parseDouble(propertyValue);
-            propertyValue = properties.getProperty(fieldName = "inv_emRate");
+            propertyValue = properties.getProperty(fieldName = "mu_emigration");
             double emigrationRateWomen = 1 / Double.parseDouble(propertyValue);
-            propertyValue = properties.getProperty(fieldName = "slope_emRate");
+            propertyValue = properties.getProperty(fieldName = "slope_emigration_rate");
             double slopeEmigrationRateWomen = Double.parseDouble(propertyValue);
-            propertyValue = properties.getProperty(fieldName = "inv_birthRate");
+            propertyValue = properties.getProperty(fieldName = "mu_birth");
             double birthRate = 1 / Double.parseDouble(propertyValue);
-            propertyValue = properties.getProperty(fieldName = "slope_birthRate");
+            propertyValue = properties.getProperty(fieldName = "slope_birth_rate");
             double slopeBirthRate = Double.parseDouble(propertyValue);
 
             womenParams = new PopulationParameters(initialPopulationSizeWomen,
@@ -92,13 +92,13 @@ public class Simulation implements Iterator<int[]> {
             // population parameters men
             propertyValue = properties.getProperty(fieldName = "init_m");
             int initialPopulationSizeMen = Integer.parseInt(propertyValue);
-            propertyValue = properties.getProperty(fieldName = "inv_deathRate_m");
+            propertyValue = properties.getProperty(fieldName = "mu_death_m");
             double deathRateMen = 1 / Double.parseDouble(propertyValue);
-            propertyValue = properties.getProperty(fieldName = "slope_deathRate_m");
+            propertyValue = properties.getProperty(fieldName = "slope_death_rate_m");
             double slopeDeathRateMen = Double.parseDouble(propertyValue);
-            propertyValue = properties.getProperty(fieldName = "inv_emRate");
+            propertyValue = properties.getProperty(fieldName = "mu_emigration");
             double emigrationRateMen = 1 / Double.parseDouble(propertyValue);
-            propertyValue = properties.getProperty(fieldName = "slope_emRate");
+            propertyValue = properties.getProperty(fieldName = "slope_emigration_rate");
             double slopeEmigrationRateMen = Double.parseDouble(propertyValue);
 
             menParams = new PopulationParameters(initialPopulationSizeMen,

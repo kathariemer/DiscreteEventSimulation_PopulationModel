@@ -71,10 +71,11 @@ public class ConfigurableSimulation {
     }
 
     /**
-     * set parameter and reset simulation for a new run
-     * @param birthRate changed birthrate
+     * set expected number of births happening in 1 TimeUnit and
+     * reset simulation for a new run
+     * @param birthRate changed birthrate, i.e. number of expected births per TimeUnit
      */
-    public void resetBirthrate(double birthRate) {
+    public void resetLambdaBirth(double birthRate) {
         if (simulation.setBirthrate(birthRate)) {
             simulation.reset();
         } else {
@@ -82,7 +83,19 @@ public class ConfigurableSimulation {
         }
     }
 
-    public void resetFemaleDeathRate(double rate) {
+    /**
+     * set the expected number of TimeUnits until 1 expected birth
+     * @param mu expected time between two births
+     */
+    public void resetMuBirth(double mu) {
+        if (simulation.setBirthrate(1/mu)) {
+            simulation.reset();
+        } else {
+            System.err.println("Current simulation still runnable.");
+        }
+    }
+
+    public void resetLambdaFemaleDeath(double rate) {
         if (simulation.setFemaleDeathRate(rate)) {
             simulation.reset();
         } else {
@@ -90,7 +103,15 @@ public class ConfigurableSimulation {
         }
     }
 
-    public void resetMaleDeathRate(double rate) {
+    public void resetMuFemaleDeath(double mu) {
+        if (simulation.setFemaleDeathRate(1/mu)) {
+            simulation.reset();
+        } else {
+            System.err.println("Current simulation still runnable.");
+        }
+    }
+
+    public void resetLambdaMaleDeath(double rate) {
         if (simulation.setMaleDeathRate(rate)) {
             simulation.reset();
         } else {
@@ -98,7 +119,15 @@ public class ConfigurableSimulation {
         }
     }
 
-    public void resetEmigrationRate(double rate) {
+    public void resetMuMaleDeath(double mu) {
+        if (simulation.setMaleDeathRate(1/mu)) {
+            simulation.reset();
+        } else {
+            System.err.println("Current simulation still runnable.");
+        }
+    }
+
+    public void resetLambdaEmigration(double rate) {
         if (simulation.setEmigrationRate(rate)) {
             simulation.reset();
         } else {
@@ -106,8 +135,24 @@ public class ConfigurableSimulation {
         }
     }
 
-    public void resetImmigrationRate(double rate) {
+    public void resetMuEmigration(double mu) {
+        if (simulation.setEmigrationRate(1/mu)) {
+            simulation.reset();
+        } else {
+            System.err.println("Current simulation still runnable.");
+        }
+    }
+
+    public void resetLambdaImmigration(double rate) {
         if (simulation.setImmigrationRate(rate)) {
+            simulation.reset();
+        } else {
+            System.err.println("Current simulation still runnable.");
+        }
+    }
+
+    public void resetMuImmigration(double mu) {
+        if (simulation.setImmigrationRate(1/mu)) {
             simulation.reset();
         } else {
             System.err.println("Current simulation still runnable.");

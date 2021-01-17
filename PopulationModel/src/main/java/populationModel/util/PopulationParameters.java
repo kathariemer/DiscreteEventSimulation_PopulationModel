@@ -64,15 +64,40 @@ public class PopulationParameters {
 
     // get dynamic values
     public double getDeathRate(int t) {
-        return deathRate + t * slopeDeathRate;
+        double r = deathRate + t * slopeDeathRate;
+        if (r < 0) {
+            throw new IllegalArgumentException(String.format(
+                    "Computed a death rate of %.2f. Only positive values are allowed.\n" +
+                            "[t = %d, rate = %.2f, slope = %.2f]", r, t, deathRate, slopeDeathRate));
+        }
+        return r;
     }
 
     public double getEmigrationRate(int t) {
-        return emigrationRate + t * slopeEmigrationRate;
+        double r = emigrationRate + t * slopeEmigrationRate;
+        if (r < 0) {
+            throw new IllegalArgumentException(String.format(
+                    "Computed an emigration rate of %.2f. Only positive values are allowed.\n" +
+                            "[t = %d, rate = %.2f, slope = %.2f]", r, t, emigrationRate, slopeEmigrationRate));
+        }
+        return r;
     }
 
     public double getBirthRate(int t) {
-        return birthRate == UNDEFINED_BIRTHRATE ? -1 : birthRate + t * slopeBirthRate;
+        if (birthRate == UNDEFINED_BIRTHRATE) {
+            throw new NullPointerException("No birthrate was specified.");
+        }
+        double r = birthRate + t * slopeBirthRate;
+        if (r < 0) {
+            throw new IllegalArgumentException(String.format(
+                    "Computed an birth rate of %.2f. Only positive values are allowed.\n" +
+                            "[t = %d, rate = %.2f, slope = %.2f]", r, t, birthRate, slopeBirthRate));
+        } else if (r >= 1) {
+            throw new IllegalArgumentException(String.format(
+                    "Computed an birth rate of %.2f. This is computationally too expensive.\n" +
+                            "[t = %d, rate = %.2f, slope = %.2f]", r, t, birthRate, slopeBirthRate));
+        }
+        return r;
     }
 
     // setters

@@ -27,3 +27,9 @@ PopulationModel/PopulationModel.iml
 PopulationModel/target/*
 
 Calibration/*
+
+PopulationModel/dependency-reduced-pom.xml
+
+*.Rmd
+res.csv
+res01.csv

@@ -21,8 +21,8 @@ public class Simulation implements Iterator<int[]> {
     private int duration;
     private EventHistory eventList;
 
-    private Set<Woman> populationF;
-    private Set<Man> populationM;
+    private Set<Integer> populationF;
+    private Set<Integer> populationM;
 
     private final PopulationParameters womenParams;
     private final PopulationParameters menParams;
@@ -144,15 +144,15 @@ public class Simulation implements Iterator<int[]> {
         // todo: maybe change people's ages
         for (int i = 0; i < sizeF; i++) {
             Woman w = new Woman(time0, womenParams);
-            populationF.add(w);
+            populationF.add(w.getID());
+            eventList.addEvents(w);
         }
-        populationF.forEach(eventList::addEvents);
 
         for (int i = 0; i < sizeM; i++) {
             Man m = new Man(time0, menParams);
-            populationM.add(m);
+            populationM.add(m.getID());
+            eventList.addEvents(m);
         }
-        populationM.forEach(eventList::addEvents);
     }
 
     @Override
@@ -218,7 +218,7 @@ public class Simulation implements Iterator<int[]> {
      * @param w woman
      */
     private void integrateWoman(Woman w) {
-        populationF.add(w);
+        populationF.add(w.getID());
         eventList.addEvents(w);
     }
 
@@ -228,7 +228,7 @@ public class Simulation implements Iterator<int[]> {
      * @param m man
      */
     private void integrateMan(Man m) {
-        populationM.add(m);
+        populationM.add(m.getID());
         eventList.addEvents(m);
     }
 

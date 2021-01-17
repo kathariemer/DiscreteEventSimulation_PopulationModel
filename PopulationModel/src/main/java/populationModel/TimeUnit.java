@@ -17,10 +17,10 @@ public class TimeUnit {
     private int immigrationsFemale = 0;
     private int immigrationsMale = 0;
 
-    private final List<Woman> deathsFemale;
-    private final List<Man> deathsMale;
-    private final List<Woman> emigrationsFemale;
-    private final List<Man> emigrationsMale;
+    private final List<Integer> deathsFemale;
+    private final List<Integer> deathsMale;
+    private final List<Integer> emigrationsFemale;
+    private final List<Integer> emigrationsMale;
 
     public TimeUnit() {
         emigrationsMale = new ArrayList<>();
@@ -46,11 +46,11 @@ public class TimeUnit {
      * @param w populationModel.person.Person
      */
     public void scheduleOneDeath(Woman w) {
-        deathsFemale.add(w);
+        deathsFemale.add(w.getID());
     }
 
     public void scheduleOneDeath(Man p) {
-        deathsMale.add(p);
+        deathsMale.add(p.getID());
     }
 
     /**
@@ -59,11 +59,11 @@ public class TimeUnit {
      * @param p populationModel.person.Person
      */
     public void scheduleOneEmigration(Man p) {
-        emigrationsMale.add(p);
+        emigrationsMale.add(p.getID());
     }
 
     public void scheduleOneEmigration(Woman p) {
-        emigrationsFemale.add(p);
+        emigrationsFemale.add(p.getID());
     }
 
     /**
@@ -96,19 +96,19 @@ public class TimeUnit {
         return immigrationsMale;
     }
 
-    public List<Woman> getDeathsFemale() {
+    public List<Integer> getDeathsFemale() {
         return deathsFemale;
     }
 
-    public List<Man> getDeathsMale() {
+    public List<Integer> getDeathsMale() {
         return deathsMale;
     }
 
-    public List<Woman> getEmigrationsFemale() {
+    public List<Integer> getEmigrationsFemale() {
         return emigrationsFemale;
     }
 
-    public List<Man> getEmigrationsMale() {
+    public List<Integer> getEmigrationsMale() {
         return emigrationsMale;
     }
 

@@ -350,4 +350,14 @@ public class Simulation implements Iterator<int[]> {
         }
         return b;
     }
+
+    @Override
+    public String toString() {
+        return "Simulation{" +
+                "duration=" + duration +
+                ", womenParams=" + womenParams +
+                ", menParams=" + menParams +
+                ", immigrationParameters=" + immigrationParameters +
+                '}';
+    }
 }

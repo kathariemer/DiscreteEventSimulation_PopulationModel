@@ -17,15 +17,16 @@ public class PopulationParameters {
 
     /**
      * initialize simulation parameters for women
+     *
      * @param initialPopulationSize number of people at time 0
-     * @param deathRate death rate for a person, value from interval (0, 1]
-     * @param emigrationRate emigration rate for a person
-     * @param birthRate birth rate for a person
-     * @param slopeDeathRate coefficient for death rate as (affine) linear function in t
-     * @param slopeEmigrationRate coefficient for emigration rate as (affine) linear function in t
-     * @param slopeBirthRate coefficient for birthrate as (affine) linear function in t
+     * @param deathRate             death rate for a person, value from interval (0, 1]
+     * @param emigrationRate        emigration rate for a person
+     * @param birthRate             birth rate for a person
+     * @param slopeDeathRate        coefficient for death rate as (affine) linear function in t
+     * @param slopeEmigrationRate   coefficient for emigration rate as (affine) linear function in t
+     * @param slopeBirthRate        coefficient for birthrate as (affine) linear function in t
      */
-    public PopulationParameters(int initialPopulationSize,double deathRate, double slopeDeathRate,
+    public PopulationParameters(int initialPopulationSize, double deathRate, double slopeDeathRate,
                                 double emigrationRate, double slopeEmigrationRate,
                                 double birthRate, double slopeBirthRate) {
         this.initialPopulationSize = initialPopulationSize;
@@ -39,11 +40,12 @@ public class PopulationParameters {
 
     /**
      * initialize simulation parameters for people, which cannot birth children
+     *
      * @param initialPopulationSize number of people at time 0
-     * @param deathRate death rate for a person, value from interval (0, 1]
-     * @param emigrationRate emigration rate for a person
-     * @param slopeDeathRate coefficient for death rate as (affine) linear function in t
-     * @param slopeEmigrationRate coefficient for emigration rate as (affine) linear function in t
+     * @param deathRate             death rate for a person, value from interval (0, 1]
+     * @param emigrationRate        emigration rate for a person
+     * @param slopeDeathRate        coefficient for death rate as (affine) linear function in t
+     * @param slopeEmigrationRate   coefficient for emigration rate as (affine) linear function in t
      */
     public PopulationParameters(int initialPopulationSize, double deathRate, double slopeDeathRate,
                                 double emigrationRate, double slopeEmigrationRate) {
@@ -104,6 +106,7 @@ public class PopulationParameters {
 
     /**
      * birthrate at time t = 0
+     *
      * @param newRate updated birthtate
      */
     public void setBirthRate(double newRate) {
@@ -132,5 +135,28 @@ public class PopulationParameters {
 
     public void setInitialPopulationSize(int initialPopulationSize) {
         this.initialPopulationSize = initialPopulationSize;
+    }
+
+    @Override
+    public String toString() {
+        if (birthRate == UNDEFINED_BIRTHRATE) {
+            return "{" +
+                    "initialPopulationSize=" + initialPopulationSize +
+                    ", deathRate=" + deathRate +
+                    ", slopeDeathRate=" + slopeDeathRate +
+                    ", emigrationRate=" + emigrationRate +
+                    ", slopeEmigrationRate=" + slopeEmigrationRate +
+                    '}';
+        } else {
+            return "{" +
+                    "initialPopulationSize=" + initialPopulationSize +
+                    ", deathRate=" + deathRate +
+                    ", slopeDeathRate=" + slopeDeathRate +
+                    ", emigrationRate=" + emigrationRate +
+                    ", slopeEmigrationRate=" + slopeEmigrationRate +
+                    ", birthRate=" + birthRate +
+                    ", slopeBirthRate=" + slopeBirthRate +
+                    '}';
+        }
     }
 }

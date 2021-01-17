@@ -42,4 +42,12 @@ public class ImmigrationParameters {
     public void setSlope(double slope) {
         this.slope = slope;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "initalRate=" + initalRate +
+                ", slope=" + slope +
+                '}';
+    }
 }

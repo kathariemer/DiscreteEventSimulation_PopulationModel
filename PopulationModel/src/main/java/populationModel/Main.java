@@ -49,7 +49,7 @@ public class Main {
             usage();
             return;
         } catch (FileNotFoundException e) {
-            System.err.printf("Directory of output file does not exist");
+            System.err.println("Directory of output file does not exist");
             System.exit(1);
             return;
         }
@@ -70,6 +70,7 @@ public class Main {
 
         // write header line to output file
         printWriter.println("# populationModel.Simulation run on " + Calendar.getInstance().getTime());
+        printWriter.println("# " + sim);
         printWriter.println(Simulation.HEADER);
 
         // run simulation

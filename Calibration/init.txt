@@ -4,7 +4,7 @@ init_f = 10000
 init_m = 10000
 
 inv_deathRate_f = 81.4
-slope_deathRate_f = 0
+slope_deathRate_f = 0;
 
 inv_deathRate_m = 79.8
 slope_deathRate_m = 0
@@ -15,7 +15,7 @@ slope_birthRate = 0
 inv_emRate = 120
 slope_emRate = 0
 
-inv_immRate = 0.1
+immRate = 100
 slope_immRate = 0
 imm_prop_female = 0.5
 imm_mean_age = 30

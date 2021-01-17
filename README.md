@@ -10,9 +10,11 @@ Update the matlab environment to invoke methods from the java program. This only
 
 It adds the path to the jar file, and therefore allows to run the simulation in MATLAB's environment. Since I do not know your folder structure, the script relies on the relative path from the ```Calibration``` folder to the ```JAR```. Make sure to run this in the ```Calibration``` folder. 
 
+<!--
 ### runBetterSimu.m
 
 A minimal demonstation of using the ```ConfigurableSimulation``` class in matlab. It initializes an instance, and demonstates a subset of the still limited number of methods.
+-->
 
 ### runSimu.m
 

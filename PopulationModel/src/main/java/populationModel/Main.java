@@ -63,7 +63,7 @@ public class Main {
         } catch (IOException e) {
             System.err.printf("Bad input file %s. \nCurrent directory: %s\n", inputPath, System.getProperty("user.dir"));
             System.exit(1);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException | NullPointerException e) {
             System.err.println(e.getMessage());
             System.exit(1);
         }

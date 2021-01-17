@@ -105,9 +105,13 @@ public class Simulation implements Iterator<int[]> {
                     deathRateMen, slopeDeathRateMen,
                     emigrationRateMen, slopeEmigrationRateMen);
         } catch (NullPointerException e) {
-            throw new NullPointerException(String.format("Required field <%s> not found in input file.", fieldName));
+            throw new NullPointerException(String.format("Required field <%s> not found in input file. Check spelling.", fieldName));
         } catch (NumberFormatException e) {
-            throw new NumberFormatException(String.format("Cannot parse number <%s>.", propertyValue));
+            if (propertyValue == null) {
+                throw new NullPointerException(String.format("Required field <%s> not found in input file. Check spelling.", fieldName));
+            } else {
+                throw new NumberFormatException(String.format("Cannot parse number <%s> in field <%s>.", propertyValue, fieldName));
+            }
         }
 
         reset();

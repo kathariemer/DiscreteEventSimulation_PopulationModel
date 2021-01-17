@@ -1,3 +1,4 @@
 date	vsn	info
+jan 17	1.5	Fix rounding; Change input parameter for immigration; Improve exception text from Simulation constructor
 jan 15	1.4	Add more setters for matlab-interface, add static indices which explain the array returned by step()
 jan 15	1.3	Add method for matlab invocation. First methods to adjust simulation rates (birthrate)

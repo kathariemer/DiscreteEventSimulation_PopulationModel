@@ -64,7 +64,7 @@ public class Main {
             System.err.printf("Bad input file %s. \nCurrent directory: %s\n", inputPath, System.getProperty("user.dir"));
             System.exit(1);
         } catch (NumberFormatException e) {
-            System.err.println("bad input numbers");
+            System.err.println(e.getMessage());
             System.exit(1);
         }
 
@@ -78,12 +78,11 @@ public class Main {
             while (sim.hasNext()) {
                 int[] res = sim.next();
                 // instead of packing apache's stringutils into the char ... i typed this out -.-
-                printWriter.printf("%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d\n", res[0],
+                printWriter.printf("%d, %d, %d, %d, %d, %d, %d, %d, %d\n", res[0],
                         res[1], res[2],
                         res[3], res[4],
                         res[5], res[6],
-                        res[7], res[8],
-                        res[9], res[10]
+                        res[7], res[8]
                 );
             }
         }

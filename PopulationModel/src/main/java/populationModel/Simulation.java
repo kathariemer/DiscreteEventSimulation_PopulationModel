@@ -45,42 +45,70 @@ public class Simulation implements Iterator<int[]> {
         properties.load(inputStream);
         inputStream.close();
 
-        // init parameters
-        duration = Integer.parseInt(properties.getProperty("timeSteps"));
 
-        // immigration parameters
-        double immigrationRate = Double.parseDouble(properties.getProperty("immRate"));
-        double slopeImmigrationRate = Double.parseDouble(properties.getProperty("slope_immRate"));
-        double propF = Double.parseDouble(properties.getProperty("imm_prop_female"));
-        double meanAge = Double.parseDouble(properties.getProperty("imm_mean_age"));
-        double sdAge = Double.parseDouble(properties.getProperty("imm_sd_age"));
-        immigrationParameters = new ImmigrationParameters(immigrationRate, slopeImmigrationRate,
-                propF, meanAge, sdAge);
+        String fieldName = "timeSteps";
+        String propertyValue = properties.getProperty(fieldName);
+        try {
+            // init parameters
+            duration = Integer.parseInt(propertyValue);
 
-        // population parameters women
-        int initialPopulationSizeWomen = Integer.parseInt(properties.getProperty("init_f"));
-        double deathRateWomen = 1 / Double.parseDouble(properties.getProperty("inv_deathRate_f"));
-        double slopeDeathRateWomen = Double.parseDouble(properties.getProperty("slope_deathRate_f"));
-        double emigrationRateWomen = 1 / Double.parseDouble(properties.getProperty("inv_emRate"));
-        double slopeEmigrationRateWomen = Double.parseDouble(properties.getProperty("slope_emRate"));
-        double birthRate = 1 / Double.parseDouble(properties.getProperty("inv_birthRate"));
-        double slopeBirthRate = Double.parseDouble(properties.getProperty("slope_birthRate"));
+            // immigration parameters
+            propertyValue = properties.getProperty(fieldName = "immRate");
+            double immigrationRate = Double.parseDouble(propertyValue);
 
-        womenParams = new PopulationParameters(initialPopulationSizeWomen,
-                deathRateWomen, slopeDeathRateWomen,
-                emigrationRateWomen, slopeEmigrationRateWomen,
-                birthRate, slopeBirthRate);
+            propertyValue = properties.getProperty(fieldName = "slope_immRate");
+            double slopeImmigrationRate = Double.parseDouble(propertyValue);
+            propertyValue = properties.getProperty(fieldName = "imm_prop_female", "0.5");
+            double propF = Double.parseDouble(propertyValue);
+            propertyValue = properties.getProperty(fieldName = "imm_mean_age");
+            double meanAge = Double.parseDouble(propertyValue);
+            propertyValue = properties.getProperty(fieldName = "imm_sd_age");
+            double sdAge = Double.parseDouble(propertyValue);
+            immigrationParameters = new ImmigrationParameters(immigrationRate, slopeImmigrationRate,
+                    propF, meanAge, sdAge);
 
-        // population parameters men
-        int initialPopulationSizeMen = Integer.parseInt(properties.getProperty("init_m"));
-        double deathRateMen = 1 / Double.parseDouble(properties.getProperty("inv_deathRate_m"));
-        double slopeDeathRateMen = Double.parseDouble(properties.getProperty("slope_deathRate_m"));
-        double emigrationRateMen = 1 / Double.parseDouble(properties.getProperty("inv_emRate"));
-        double slopeEmigrationRateMen = Double.parseDouble(properties.getProperty("slope_emRate"));
+            // population parameters women
 
-        menParams = new PopulationParameters(initialPopulationSizeMen,
-                deathRateMen, slopeDeathRateMen,
-                emigrationRateMen, slopeEmigrationRateMen);
+            propertyValue = properties.getProperty(fieldName = "init_f");
+            int initialPopulationSizeWomen = Integer.parseInt(propertyValue);
+            propertyValue = properties.getProperty(fieldName = "inv_deathRate_f");
+            double deathRateWomen = 1 / Double.parseDouble(propertyValue);
+            propertyValue = properties.getProperty(fieldName = "slope_deathRate_f");
+            double slopeDeathRateWomen = Double.parseDouble(propertyValue);
+            propertyValue = properties.getProperty(fieldName = "inv_emRate");
+            double emigrationRateWomen = 1 / Double.parseDouble(propertyValue);
+            propertyValue = properties.getProperty(fieldName = "slope_emRate");
+            double slopeEmigrationRateWomen = Double.parseDouble(propertyValue);
+            propertyValue = properties.getProperty(fieldName = "inv_birthRate");
+            double birthRate = 1 / Double.parseDouble(propertyValue);
+            propertyValue = properties.getProperty(fieldName = "slope_birthRate");
+            double slopeBirthRate = Double.parseDouble(propertyValue);
+
+            womenParams = new PopulationParameters(initialPopulationSizeWomen,
+                    deathRateWomen, slopeDeathRateWomen,
+                    emigrationRateWomen, slopeEmigrationRateWomen,
+                    birthRate, slopeBirthRate);
+
+            // population parameters men
+            propertyValue = properties.getProperty(fieldName = "init_m");
+            int initialPopulationSizeMen = Integer.parseInt(propertyValue);
+            propertyValue = properties.getProperty(fieldName = "inv_deathRate_m");
+            double deathRateMen = 1 / Double.parseDouble(propertyValue);
+            propertyValue = properties.getProperty(fieldName = "slope_deathRate_m");
+            double slopeDeathRateMen = Double.parseDouble(propertyValue);
+            propertyValue = properties.getProperty(fieldName = "inv_emRate");
+            double emigrationRateMen = 1 / Double.parseDouble(propertyValue);
+            propertyValue = properties.getProperty(fieldName = "slope_emRate");
+            double slopeEmigrationRateMen = Double.parseDouble(propertyValue);
+
+            menParams = new PopulationParameters(initialPopulationSizeMen,
+                    deathRateMen, slopeDeathRateMen,
+                    emigrationRateMen, slopeEmigrationRateMen);
+        } catch (NullPointerException e) {
+            throw new NullPointerException(String.format("Required field <%s> not found in input file.", fieldName));
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException(String.format("Cannot parse number <%s>.", propertyValue));
+        }
 
         reset();
     }
@@ -224,12 +252,10 @@ public class Simulation implements Iterator<int[]> {
         stats[2] = populationM.size();
         stats[3] = e.getBirthsFemale();
         stats[4] = e.getBirthsMale();
-        stats[5] = e.getImmigrationsFemale();
-        stats[6] = e.getImmigrationsMale();
-        stats[7] = e.getDeathsFemale().size();
-        stats[8] = e.getDeathsMale().size();
-        stats[9] = e.getEmigrationsFemale().size();
-        stats[10] = e.getEmigrationsMale().size();
+        stats[5] = e.getDeathsFemale().size();
+        stats[6] = e.getDeathsMale().size();
+        stats[7] = e.getImmigrationsFemale() + e.getImmigrationsMale();
+        stats[8] = e.getEmigrationsFemale().size() + e.getEmigrationsMale().size();
         return stats;
     }
 

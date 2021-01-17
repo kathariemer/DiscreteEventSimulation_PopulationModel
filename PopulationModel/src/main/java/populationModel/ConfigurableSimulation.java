@@ -15,12 +15,10 @@ public class ConfigurableSimulation {
             IDX_POP_M = 3,
             IDX_BIRTH_F = 4,
             IDX_BIRTH_M = 5,
-            IDX_IMMI_F = 6,
-            IDX_IMMI_M = 7,
-            IDX_DEATH_F = 8,
-            IDX_DEATH_M = 9,
-            IDX_EMI_F = 10,
-            IDX_EMI_M = 11;
+            IDX_DEATH_F = 6,
+            IDX_DEATH_M = 7,
+            IDX_IMMI = 8,
+            IDX_EMI = 9;
 
     public ConfigurableSimulation(String inputFile) throws IOException {
         this.simulation = new Simulation(inputFile);

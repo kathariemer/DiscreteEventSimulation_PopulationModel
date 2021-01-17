@@ -10,8 +10,8 @@ import java.util.List;
  * holds information about events, which are scheduled to happen within a time step
  */
 public class TimeUnit {
-    public static final String HEADER = "birthsF, birthsM, immigrationsF, immigrationsM, deathsF, deathsM, emigrationsF, emigrationsM";
-    public static final int STATCOUNT = 8;
+    public static final String HEADER = "birthsF, birthsM, deathsF, deathsM, immigrations, emigrations";
+    public static final int STATCOUNT = 6;
     private int birthsFemale = 0;
     private int birthsMale = 0;
     private int immigrationsFemale = 0;
@@ -116,11 +116,10 @@ public class TimeUnit {
     public String toString() {
         return birthsFemale +
                 ", " + birthsMale +
-                ", " + immigrationsFemale +
-                ", " + immigrationsMale +
                 ", " + deathsFemale.size() +
                 ", " + deathsMale.size() +
-                ", " + emigrationsFemale.size() +
-                ", " + emigrationsMale.size();
+                ", " + (immigrationsFemale + immigrationsMale) +
+                ", " + (emigrationsFemale.size() + emigrationsMale.size())
+                ;
     }
 }

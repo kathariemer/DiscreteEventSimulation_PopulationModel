@@ -25,3 +25,5 @@ hs_err_pid*
 PopulationModel/.idea/*
 PopulationModel/PopulationModel.iml
 PopulationModel/target/*
+
+Calibration/*

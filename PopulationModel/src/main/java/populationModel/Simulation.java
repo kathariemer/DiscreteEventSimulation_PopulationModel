@@ -321,10 +321,26 @@ public class Simulation implements Iterator<int[]> {
         return b;
     }
 
+    public boolean setBirthSlope(double slope) {
+        boolean b = !hasNext();
+        if (b) {
+            womenParams.setSlopeBirthRate(slope);
+        }
+        return b;
+    }
+
     public boolean setImmigrationRate(double rate) {
         boolean b = !hasNext();
         if (b) {
             immigrationParameters.setRate(rate);
+        }
+        return b;
+    }
+
+    public boolean setImmigrationSlope(double slope) {
+        boolean b = !hasNext();
+        if (b) {
+            immigrationParameters.setSlope(slope);
         }
         return b;
     }
@@ -337,10 +353,27 @@ public class Simulation implements Iterator<int[]> {
         return b;
     }
 
+    public boolean setFemaleDeathSlope(double slope) {
+        boolean b = !hasNext();
+        if (b) {
+            womenParams.setSlopeDeathRate(slope);
+        }
+        return b;
+    }
+
     public boolean setMaleDeathRate(double rate) {
         boolean b = !hasNext();
         if (b) {
             menParams.setDeathRate(rate);
+        }
+        return b;
+    }
+
+
+    public boolean setMaleDeathSlope(double slope) {
+        boolean b = !hasNext();
+        if (b) {
+            menParams.setSlopeDeathRate(slope);
         }
         return b;
     }
@@ -350,6 +383,15 @@ public class Simulation implements Iterator<int[]> {
         if (b) {
             womenParams.setEmigrationRate(rate);
             menParams.setEmigrationRate(rate);
+        }
+        return b;
+    }
+
+    public boolean setEmigrationSlope(double slope) {
+        boolean b = !hasNext();
+        if (b) {
+            womenParams.setSlopeEmigrationRate(slope);
+            menParams.setSlopeEmigrationRate(slope);
         }
         return b;
     }

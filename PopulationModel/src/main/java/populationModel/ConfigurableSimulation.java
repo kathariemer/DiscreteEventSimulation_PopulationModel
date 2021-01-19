@@ -28,6 +28,7 @@ public class ConfigurableSimulation {
 
     /**
      * generate a fresh simulation
+     *
      * @param inputFile path to a file from which all initial parameters are read in
      * @throws IOException if the init file cannot be found
      */
@@ -70,23 +71,35 @@ public class ConfigurableSimulation {
     }
 
     /**
-     * Change the simulation's parameters using a vector
-     * @param params Ordered array of length 10
+     * Change the simulation's parameters using a vector of length 10 in the following order:
+     * <ol>
+     *     <li>muBirth = [muBirth, slopeBirthrate]</li>
+     *     <li>muDeathF</li>
+     *     <li>muDeathM</li>
+     *     <li>lambdaImmi</li>
+     *     <li>muEmi</li>
+     * </ol>
+     *
+     * @param params a vector
      */
     public void resetAll(double[] params) {
         if (params.length != 10) {
             throw new IllegalArgumentException("Provide an array of exactly 10 parameters");
         }
-        throw new UnsupportedOperationException("If you want to use this method, " +
-                "please send a text message to the programmer :D");
-    }
+        if (simulation.setBirthrate(1 / params[0])) {
+            simulation.setBirthSlope(params[1]);
 
-    /**
-     * will soon be deprecated
-     * @param size
-     */
-    public void resetFemaleInitialPopulation(int size) {
-        if (simulation.setFemaleInitialPopulationSize(size)) {
+            simulation.setFemaleDeathRate(1 / params[2]);
+            simulation.setFemaleDeathSlope(params[3]);
+
+            simulation.setMaleDeathRate(1 / params[4]);
+            simulation.setMaleDeathSlope(params[5]);
+
+            simulation.setImmigrationRate(params[6]);
+            simulation.setImmigrationSlope(params[7]);
+
+            simulation.setEmigrationRate(1 / params[8]);
+            simulation.setEmigrationSlope(params[9]);
             simulation.reset();
         } else {
             System.err.println("Current simulation still runnable.");
@@ -94,11 +107,13 @@ public class ConfigurableSimulation {
     }
 
     /**
-     * will soon be deprecated
-     * @param size
+     * Change the initial population size
+     * @param sizeF number of female inhabitants
+     * @param sizeM number of male inhabitants
      */
-    public void resetMaleInitialPopulation(int size) {
-        if (simulation.setMaleInitialPopulationSize(size)) {
+    public void resetInitialPopulation(int sizeF, int sizeM) {
+        if (simulation.setFemaleInitialPopulationSize(sizeF)) {
+            simulation.setMaleInitialPopulationSize(sizeM);
             simulation.reset();
         } else {
             System.err.println("Current simulation still runnable.");
@@ -119,132 +134,8 @@ public class ConfigurableSimulation {
     }
 
     /**
-     * will soon be deprecated
-     * set expected number of births happening in 1 TimeUnit and
-     * reset simulation for a new run
-     *
-     * @param birthRate changed birthrate, i.e. number of expected births per TimeUnit
-     */
-    public void resetLambdaBirth(double birthRate) {
-        if (simulation.setBirthrate(birthRate)) {
-            simulation.reset();
-        } else {
-            System.err.println("Current simulation still runnable.");
-        }
-    }
-
-    /**
-     * will soon be deprecated
-     * set the expected number of TimeUnits until 1 expected birth
-     *
-     * @param mu expected time between two births
-     */
-    public void resetMuBirth(double mu) {
-        if (simulation.setBirthrate(1 / mu)) {
-            simulation.reset();
-        } else {
-            System.err.println("Current simulation still runnable.");
-        }
-    }
-
-    /**
-     * will soon be deprecated
-     * @param size
-     */
-    public void resetLambdaFemaleDeath(double rate) {
-        if (simulation.setFemaleDeathRate(rate)) {
-            simulation.reset();
-        } else {
-            System.err.println("Current simulation still runnable.");
-        }
-    }
-
-    /**
-     * will soon be deprecated
-     * @param size
-     */
-    public void resetMuFemaleDeath(double mu) {
-        if (simulation.setFemaleDeathRate(1 / mu)) {
-            simulation.reset();
-        } else {
-            System.err.println("Current simulation still runnable.");
-        }
-    }
-
-    /**
-     * will soon be deprecated
-     * @param size
-     */
-    public void resetLambdaMaleDeath(double rate) {
-        if (simulation.setMaleDeathRate(rate)) {
-            simulation.reset();
-        } else {
-            System.err.println("Current simulation still runnable.");
-        }
-    }
-
-    /**
-     * will soon be deprecated
-     * @param size
-     */
-    public void resetMuMaleDeath(double mu) {
-        if (simulation.setMaleDeathRate(1 / mu)) {
-            simulation.reset();
-        } else {
-            System.err.println("Current simulation still runnable.");
-        }
-    }
-
-    /**
-     * will soon be deprecated
-     * @param size
-     */
-    public void resetLambdaEmigration(double rate) {
-        if (simulation.setEmigrationRate(rate)) {
-            simulation.reset();
-        } else {
-            System.err.println("Current simulation still runnable.");
-        }
-    }
-
-    /**
-     * will soon be deprecated
-     * @param size
-     */
-    public void resetMuEmigration(double mu) {
-        if (simulation.setEmigrationRate(1 / mu)) {
-            simulation.reset();
-        } else {
-            System.err.println("Current simulation still runnable.");
-        }
-    }
-
-    /**
-     * will soon be deprecated
-     * @param size
-     */
-    public void resetLambdaImmigration(double rate) {
-        if (simulation.setImmigrationRate(rate)) {
-            simulation.reset();
-        } else {
-            System.err.println("Current simulation still runnable.");
-        }
-    }
-
-    /**
-     * will soon be deprecated
-     * @param size
-     */
-    public void resetMuImmigration(double mu) {
-        if (simulation.setImmigrationRate(1 / mu)) {
-            simulation.reset();
-        } else {
-            System.err.println("Current simulation still runnable.");
-        }
-    }
-
-    /**
      * A simulation is mostly defined by all it's rates
+     *
      * @return A very long string with all of the parameters rates (and slopes)
      */
     public String getCurrentSettings() {

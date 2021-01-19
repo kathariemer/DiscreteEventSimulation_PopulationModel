@@ -3,13 +3,19 @@ package populationModel;
 import java.io.IOException;
 
 /**
- * A wrapper for simulation which e.g. may be used in a matlab environment
- * It also allows to run a simulation, change a parameter, and run a new simulation with
- * th new parameters - therefore it was named ConfigurableSimulation
+ * A wrapper for simulation which e.g. may be used in a matlab environment. It allows to step through the tiemsteps and change parameters
  */
 public class ConfigurableSimulation {
+
     private final Simulation simulation;
+    /**
+     * returns an array of variable names. The positions correspond to the return value of step()
+     */
     public static final String[] HEADER = Simulation.HEADER.split(", ");
+
+    /**
+     * returns the Matlab indices (starting at 1, not 0) of the position of a value in the return of step()
+     */
     public static final int IDX_TIME = 1,
             IDX_POP_F = 2,
             IDX_POP_M = 3,
@@ -20,6 +26,11 @@ public class ConfigurableSimulation {
             IDX_IMMI = 8,
             IDX_EMI = 9;
 
+    /**
+     * generate a fresh simulation
+     * @param inputFile path to a file from which all initial parameters are read in
+     * @throws IOException if the init file cannot be found
+     */
     public ConfigurableSimulation(String inputFile) throws IOException {
         this.simulation = new Simulation(inputFile);
     }
@@ -59,6 +70,7 @@ public class ConfigurableSimulation {
     }
 
     /**
+     * Change the simulation's parameters using a vector
      * @param params Ordered array of length 10
      */
     public void resetAll(double[] params) {
@@ -69,6 +81,10 @@ public class ConfigurableSimulation {
                 "please send a text message to the programmer :D");
     }
 
+    /**
+     * will soon be deprecated
+     * @param size
+     */
     public void resetFemaleInitialPopulation(int size) {
         if (simulation.setFemaleInitialPopulationSize(size)) {
             simulation.reset();
@@ -77,6 +93,10 @@ public class ConfigurableSimulation {
         }
     }
 
+    /**
+     * will soon be deprecated
+     * @param size
+     */
     public void resetMaleInitialPopulation(int size) {
         if (simulation.setMaleInitialPopulationSize(size)) {
             simulation.reset();
@@ -86,7 +106,7 @@ public class ConfigurableSimulation {
     }
 
     /**
-     * set parameter and reset simulation for a new run
+     * set number of consecutive time steps the simulation models. Only possible at the end of a simulation.
      *
      * @param duration changed simulation duration
      */
@@ -99,6 +119,7 @@ public class ConfigurableSimulation {
     }
 
     /**
+     * will soon be deprecated
      * set expected number of births happening in 1 TimeUnit and
      * reset simulation for a new run
      *
@@ -113,6 +134,7 @@ public class ConfigurableSimulation {
     }
 
     /**
+     * will soon be deprecated
      * set the expected number of TimeUnits until 1 expected birth
      *
      * @param mu expected time between two births
@@ -125,6 +147,10 @@ public class ConfigurableSimulation {
         }
     }
 
+    /**
+     * will soon be deprecated
+     * @param size
+     */
     public void resetLambdaFemaleDeath(double rate) {
         if (simulation.setFemaleDeathRate(rate)) {
             simulation.reset();
@@ -133,6 +159,10 @@ public class ConfigurableSimulation {
         }
     }
 
+    /**
+     * will soon be deprecated
+     * @param size
+     */
     public void resetMuFemaleDeath(double mu) {
         if (simulation.setFemaleDeathRate(1 / mu)) {
             simulation.reset();
@@ -141,6 +171,10 @@ public class ConfigurableSimulation {
         }
     }
 
+    /**
+     * will soon be deprecated
+     * @param size
+     */
     public void resetLambdaMaleDeath(double rate) {
         if (simulation.setMaleDeathRate(rate)) {
             simulation.reset();
@@ -149,6 +183,10 @@ public class ConfigurableSimulation {
         }
     }
 
+    /**
+     * will soon be deprecated
+     * @param size
+     */
     public void resetMuMaleDeath(double mu) {
         if (simulation.setMaleDeathRate(1 / mu)) {
             simulation.reset();
@@ -157,6 +195,10 @@ public class ConfigurableSimulation {
         }
     }
 
+    /**
+     * will soon be deprecated
+     * @param size
+     */
     public void resetLambdaEmigration(double rate) {
         if (simulation.setEmigrationRate(rate)) {
             simulation.reset();
@@ -165,6 +207,10 @@ public class ConfigurableSimulation {
         }
     }
 
+    /**
+     * will soon be deprecated
+     * @param size
+     */
     public void resetMuEmigration(double mu) {
         if (simulation.setEmigrationRate(1 / mu)) {
             simulation.reset();
@@ -173,6 +219,10 @@ public class ConfigurableSimulation {
         }
     }
 
+    /**
+     * will soon be deprecated
+     * @param size
+     */
     public void resetLambdaImmigration(double rate) {
         if (simulation.setImmigrationRate(rate)) {
             simulation.reset();
@@ -181,6 +231,10 @@ public class ConfigurableSimulation {
         }
     }
 
+    /**
+     * will soon be deprecated
+     * @param size
+     */
     public void resetMuImmigration(double mu) {
         if (simulation.setImmigrationRate(1 / mu)) {
             simulation.reset();
@@ -189,6 +243,10 @@ public class ConfigurableSimulation {
         }
     }
 
+    /**
+     * A simulation is mostly defined by all it's rates
+     * @return A very long string with all of the parameters rates (and slopes)
+     */
     public String getCurrentSettings() {
         return simulation.toString();
     }

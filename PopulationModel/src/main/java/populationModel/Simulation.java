@@ -170,6 +170,9 @@ public class Simulation implements Iterator<int[]> {
      */
     @Override
     public int[] next() {
+        if (time == 0) {
+            return currentStats(time++);
+        }
         TimeUnit e = eventList.getTimeUnit(time);
         if (e != null) {
             addImmigrations(time, e);

@@ -24,22 +24,49 @@ public class ConfigurableSimulation {
         this.simulation = new Simulation(inputFile);
     }
 
+    /**
+     * perform one step of the simulation with current parameters
+     * repeats cyclically (with t=1) when more than @code duration steps
+     * have been performed
+     *
+     * @return array of population statistics. Semantics of the positions can be found with the static IDX_* methods
+     */
     public int[] step() {
+        if (!simulation.hasNext()) {
+            simulation.reset();
+        }
+        return simulation.next();
+    }
+
+    /**
+     * like step() but computes multiple steps at once and
+     *
+     * @param k number of steps
+     * @return array of population statistics after k steps
+     */
+    public int[] step(int k) {
+        if (k < 1) {
+            throw new IllegalArgumentException("Please provide a positive step count.");
+        }
         int[] res = null;
-        if (simulation.hasNext()) {
+        for (int i = 0; i < k; i++) {
+            if (!simulation.hasNext()) {
+                simulation.reset();
+            }
             res = simulation.next();
         }
         return res;
     }
 
-    public int[] step(int k) {
-        int[] res = null;
-        for (int i = 0; i < k; i++) {
-            if (simulation.hasNext()) {
-                res = simulation.next();
-            }
+    /**
+     * @param params Ordered array of length 10
+     */
+    public void resetAll(double[] params) {
+        if (params.length != 10) {
+            throw new IllegalArgumentException("Provide an array of exactly 10 parameters");
         }
-        return res;
+        throw new UnsupportedOperationException("If you want to use this method, " +
+                "please send a text message to the programmer :D");
     }
 
     public void resetFemaleInitialPopulation(int size) {
@@ -60,6 +87,7 @@ public class ConfigurableSimulation {
 
     /**
      * set parameter and reset simulation for a new run
+     *
      * @param duration changed simulation duration
      */
     public void resetDuration(int duration) {
@@ -73,6 +101,7 @@ public class ConfigurableSimulation {
     /**
      * set expected number of births happening in 1 TimeUnit and
      * reset simulation for a new run
+     *
      * @param birthRate changed birthrate, i.e. number of expected births per TimeUnit
      */
     public void resetLambdaBirth(double birthRate) {
@@ -85,10 +114,11 @@ public class ConfigurableSimulation {
 
     /**
      * set the expected number of TimeUnits until 1 expected birth
+     *
      * @param mu expected time between two births
      */
     public void resetMuBirth(double mu) {
-        if (simulation.setBirthrate(1/mu)) {
+        if (simulation.setBirthrate(1 / mu)) {
             simulation.reset();
         } else {
             System.err.println("Current simulation still runnable.");
@@ -104,7 +134,7 @@ public class ConfigurableSimulation {
     }
 
     public void resetMuFemaleDeath(double mu) {
-        if (simulation.setFemaleDeathRate(1/mu)) {
+        if (simulation.setFemaleDeathRate(1 / mu)) {
             simulation.reset();
         } else {
             System.err.println("Current simulation still runnable.");
@@ -120,7 +150,7 @@ public class ConfigurableSimulation {
     }
 
     public void resetMuMaleDeath(double mu) {
-        if (simulation.setMaleDeathRate(1/mu)) {
+        if (simulation.setMaleDeathRate(1 / mu)) {
             simulation.reset();
         } else {
             System.err.println("Current simulation still runnable.");
@@ -136,7 +166,7 @@ public class ConfigurableSimulation {
     }
 
     public void resetMuEmigration(double mu) {
-        if (simulation.setEmigrationRate(1/mu)) {
+        if (simulation.setEmigrationRate(1 / mu)) {
             simulation.reset();
         } else {
             System.err.println("Current simulation still runnable.");
@@ -152,10 +182,15 @@ public class ConfigurableSimulation {
     }
 
     public void resetMuImmigration(double mu) {
-        if (simulation.setImmigrationRate(1/mu)) {
+        if (simulation.setImmigrationRate(1 / mu)) {
             simulation.reset();
         } else {
             System.err.println("Current simulation still runnable.");
         }
     }
+
+    public String getCurrentSettings() {
+        return simulation.toString();
+    }
+
 }

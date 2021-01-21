@@ -297,103 +297,16 @@ public class Simulation implements Iterator<int[]> {
         return b;
     }
 
-    public boolean setFemaleInitialPopulationSize(int size) {
-        boolean b = !hasNext();
-        if (b) {
-            womenParams.setInitialPopulationSize(size);
-        }
-        return b;
+    public PopulationParameters getWomenParams() {
+        return womenParams;
     }
 
-    public boolean setMaleInitialPopulationSize(int size) {
-        boolean b = !hasNext();
-        if (b) {
-            menParams.setInitialPopulationSize(size);
-        }
-        return b;
+    public PopulationParameters getMenParams() {
+        return menParams;
     }
 
-    public boolean setBirthrate(double rate) {
-        boolean b = !hasNext();
-        if (b) {
-            womenParams.setBirthRate(rate);
-        }
-        return b;
-    }
-
-    public boolean setBirthSlope(double slope) {
-        boolean b = !hasNext();
-        if (b) {
-            womenParams.setSlopeBirthRate(slope);
-        }
-        return b;
-    }
-
-    public boolean setImmigrationRate(double rate) {
-        boolean b = !hasNext();
-        if (b) {
-            immigrationParameters.setRate(rate);
-        }
-        return b;
-    }
-
-    public boolean setImmigrationSlope(double slope) {
-        boolean b = !hasNext();
-        if (b) {
-            immigrationParameters.setSlope(slope);
-        }
-        return b;
-    }
-
-    public boolean setFemaleDeathRate(double rate) {
-        boolean b = !hasNext();
-        if (b) {
-            womenParams.setDeathRate(rate);
-        }
-        return b;
-    }
-
-    public boolean setFemaleDeathSlope(double slope) {
-        boolean b = !hasNext();
-        if (b) {
-            womenParams.setSlopeDeathRate(slope);
-        }
-        return b;
-    }
-
-    public boolean setMaleDeathRate(double rate) {
-        boolean b = !hasNext();
-        if (b) {
-            menParams.setDeathRate(rate);
-        }
-        return b;
-    }
-
-
-    public boolean setMaleDeathSlope(double slope) {
-        boolean b = !hasNext();
-        if (b) {
-            menParams.setSlopeDeathRate(slope);
-        }
-        return b;
-    }
-
-    public boolean setEmigrationRate(double rate) {
-        boolean b = !hasNext();
-        if (b) {
-            womenParams.setEmigrationRate(rate);
-            menParams.setEmigrationRate(rate);
-        }
-        return b;
-    }
-
-    public boolean setEmigrationSlope(double slope) {
-        boolean b = !hasNext();
-        if (b) {
-            womenParams.setSlopeEmigrationRate(slope);
-            menParams.setSlopeEmigrationRate(slope);
-        }
-        return b;
+    public ImmigrationParameters getImmigrationParameters() {
+        return immigrationParameters;
     }
 
     @Override

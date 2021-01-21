@@ -1,5 +1,8 @@
 package populationModel;
 
+import populationModel.util.ImmigrationParameters;
+import populationModel.util.PopulationParameters;
+
 import java.io.IOException;
 
 /**
@@ -73,37 +76,95 @@ public class ConfigurableSimulation {
     /**
      * Change the simulation's parameters using a vector of length 10 in the following order:
      * <ol>
-     *     <li>muBirth = [muBirth, slopeBirthrate]</li>
+     *     <li>muBirth</li>
+     *     <li>slopeBirthRate</li>
      *     <li>muDeathF</li>
+     *     <li>slopeDeathRateF</li>
      *     <li>muDeathM</li>
+     *     <li>slopeDeathRateM</li>
      *     <li>lambdaImmi</li>
+     *     <li>slopeImmiRate</li>
      *     <li>muEmi</li>
+     *     <li>slopeEmiRate</li>
      * </ol>
      *
-     * @param params a vector
+     * @param params a vector of length 10
      */
     public void resetAll(double[] params) {
         if (params.length != 10) {
             throw new IllegalArgumentException("Provide an array of exactly 10 parameters");
         }
-        if (simulation.setBirthrate(1 / params[0])) {
-            simulation.setBirthSlope(params[1]);
+        if (simulation.hasNext()) {
+            PopulationParameters women = simulation.getWomenParams();
+            PopulationParameters men = simulation.getMenParams();
+            ImmigrationParameters immigration = simulation.getImmigrationParameters();
 
-            simulation.setFemaleDeathRate(1 / params[2]);
-            simulation.setFemaleDeathSlope(params[3]);
+            women.setBirthRate(1/params[0]);
+            women.setSlopeBirthRate(params[1]);
 
-            simulation.setMaleDeathRate(1 / params[4]);
-            simulation.setMaleDeathSlope(params[5]);
+            women.setDeathRate(1 / params[2]);
+            women.setSlopeDeathRate(params[3]);
 
-            simulation.setImmigrationRate(params[6]);
-            simulation.setImmigrationSlope(params[7]);
+            men.setDeathRate(1 / params[4]);
+            men.setSlopeDeathRate(params[5]);
 
-            simulation.setEmigrationRate(1 / params[8]);
-            simulation.setEmigrationSlope(params[9]);
+            immigration.setRate(params[6]);
+            immigration.setSlope(params[7]);
+
+            double emigrationRate = 1 / params[8];
+            double emigrationSlope = params[9];
+            women.setEmigrationRate(emigrationRate);
+            men.setEmigrationRate(emigrationRate);
+            women.setSlopeEmigrationRate(emigrationSlope);
+            men.setSlopeEmigrationRate(emigrationSlope);
+
             simulation.reset();
         } else {
             System.err.println("Current simulation still runnable.");
         }
+    }
+
+
+    /**
+     * Get the simulation's parameters (a vector of length 10) in the following order:
+     * <ol>
+     *     <li>muBirth</li>
+     *     <li>slopeBirthRate</li>
+     *     <li>muDeathF</li>
+     *     <li>slopeDeathRateF</li>
+     *     <li>muDeathM</li>
+     *     <li>slopeDeathRateM</li>
+     *     <li>lambdaImmi</li>
+     *     <li>slopeImmiRate</li>
+     *     <li>muEmi</li>
+     *     <li>slopeEmiRate</li>
+     * </ol>
+     *
+     * @return  a vector of length 10
+     */
+    public double[] getParams() {
+        PopulationParameters women = simulation.getWomenParams();
+        PopulationParameters men = simulation.getMenParams();
+        ImmigrationParameters immigration = simulation.getImmigrationParameters();
+
+        double[] params = new double[10];
+
+        params[0] = 1/women.getBirthRate();
+        params[1] = women.getSlopeBirthRate();
+
+        params[2] = women.getDeathRate();
+        params[3] = women.getSlopeDeathRate();
+
+        params[4] = men.getDeathRate();
+        params[5] = men.getSlopeDeathRate();
+
+        params[6] = immigration.getRate();
+        params[7] = immigration.getSlope();
+
+        params[8] = women.getEmigrationRate();
+        params[9] = women.getSlopeEmigrationRate();
+
+        return params;
     }
 
     /**
@@ -112,8 +173,9 @@ public class ConfigurableSimulation {
      * @param sizeM number of male inhabitants
      */
     public void resetInitialPopulation(int sizeF, int sizeM) {
-        if (simulation.setFemaleInitialPopulationSize(sizeF)) {
-            simulation.setMaleInitialPopulationSize(sizeM);
+        if (simulation.hasNext()) {
+            simulation.getWomenParams().setInitialPopulationSize(sizeF);
+            simulation.getMenParams().setInitialPopulationSize(sizeM);
             simulation.reset();
         } else {
             System.err.println("Current simulation still runnable.");

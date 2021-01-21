@@ -137,6 +137,30 @@ public class PopulationParameters {
         this.initialPopulationSize = initialPopulationSize;
     }
 
+    public double getDeathRate() {
+        return deathRate;
+    }
+
+    public double getEmigrationRate() {
+        return emigrationRate;
+    }
+
+    public double getBirthRate() {
+        return birthRate;
+    }
+
+    public double getSlopeDeathRate() {
+        return slopeDeathRate;
+    }
+
+    public double getSlopeEmigrationRate() {
+        return slopeEmigrationRate;
+    }
+
+    public double getSlopeBirthRate() {
+        return slopeBirthRate;
+    }
+
     @Override
     public String toString() {
         if (birthRate == UNDEFINED_BIRTHRATE) {

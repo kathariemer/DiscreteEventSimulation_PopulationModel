@@ -50,4 +50,12 @@ public class ImmigrationParameters {
                 ", slope=" + slope +
                 '}';
     }
+
+    public double getRate() {
+        return initalRate;
+    }
+
+    public double getSlope() {
+        return slope;
+    }
 }

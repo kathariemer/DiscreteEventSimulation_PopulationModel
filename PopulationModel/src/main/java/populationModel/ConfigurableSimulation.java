@@ -95,6 +95,8 @@ public class ConfigurableSimulation {
             throw new IllegalArgumentException("Provide an array of exactly 10 parameters");
         }
         if (simulation.hasNext()) {
+            System.err.println("Current simulation still runnable.");
+        } else {
             PopulationParameters women = simulation.getWomenParams();
             PopulationParameters men = simulation.getMenParams();
             ImmigrationParameters immigration = simulation.getImmigrationParameters();
@@ -119,8 +121,6 @@ public class ConfigurableSimulation {
             men.setSlopeEmigrationRate(emigrationSlope);
 
             simulation.reset();
-        } else {
-            System.err.println("Current simulation still runnable.");
         }
     }
 

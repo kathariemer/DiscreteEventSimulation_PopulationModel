@@ -152,16 +152,16 @@ public class ConfigurableSimulation {
         params[0] = 1/women.getBirthRate();
         params[1] = women.getSlopeBirthRate();
 
-        params[2] = women.getDeathRate();
+        params[2] = 1/women.getDeathRate();
         params[3] = women.getSlopeDeathRate();
 
-        params[4] = men.getDeathRate();
+        params[4] = 1/men.getDeathRate();
         params[5] = men.getSlopeDeathRate();
 
         params[6] = immigration.getRate();
         params[7] = immigration.getSlope();
 
-        params[8] = women.getEmigrationRate();
+        params[8] = 1/women.getEmigrationRate();
         params[9] = women.getSlopeEmigrationRate();
 
         return params;

@@ -60,12 +60,12 @@ public class Simulation implements Iterator<int[]> {
             double slopeImmigrationRate = Double.parseDouble(propertyValue);
             propertyValue = properties.getProperty(fieldName = "imm_prop_female", "0.5");
             double propF = Double.parseDouble(propertyValue);
-            propertyValue = properties.getProperty(fieldName = "imm_mean_age");
-            double meanAge = Double.parseDouble(propertyValue);
-            propertyValue = properties.getProperty(fieldName = "imm_sd_age");
-            double sdAge = Double.parseDouble(propertyValue);
+            // propertyValue = properties.getProperty(fieldName = "imm_mean_age");
+            // double meanAge = Double.parseDouble(propertyValue);
+            // propertyValue = properties.getProperty(fieldName = "imm_sd_age");
+            // double sdAge = Double.parseDouble(propertyValue);
             immigrationParameters = new ImmigrationParameters(immigrationRate, slopeImmigrationRate,
-                    propF, meanAge, sdAge);
+                    propF, 0, 0);
 
             // population parameters women
 

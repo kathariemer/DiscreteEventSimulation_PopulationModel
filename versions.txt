@@ -1,5 +1,6 @@
 date	vsn	info
-jan 21	2.r32	getParams method implemented
+feb 01	2.4	fix initialization bug
+jan 21	2.3	getParams method implemented
 jan 19	2.2	Implement reset all; cleanup
 jan 19	2.1	Fix step 0 (return init), make resetAll which takes a vector of length 10, step() repeats the simulation if more steps than duration have been performed
 jan 17 	2.0	Throw exceptions for illegal rates (too large, too small); Have parameter names according to rate (lambda) or expectation value (mu)

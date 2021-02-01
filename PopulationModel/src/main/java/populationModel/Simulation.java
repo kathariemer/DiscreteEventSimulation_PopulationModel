@@ -140,7 +140,7 @@ public class Simulation implements Iterator<int[]> {
      */
     private void initPopulation(int sizeF, int sizeM) {
         int time0 = 0;
-        cumulativeImmigrationTime = (float) time0 - 1 + randomExp(immigrationParameters.getImmigrationRate(time0));
+        cumulativeImmigrationTime = (float) (time0 + randomExp(immigrationParameters.getImmigrationRate(time0)));
         // todo: maybe change people's ages
         for (int i = 0; i < sizeF; i++) {
             Woman w = new Woman(time0, womenParams);

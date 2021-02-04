@@ -14,7 +14,6 @@ public class Woman implements Person{
     private final int id;
     private final Action exit;
     private final int exitTime;
-    private final int birthTime;
     private final ArrayList<Integer> birthTimes = new ArrayList<>();
 
     /**
@@ -26,7 +25,6 @@ public class Woman implements Person{
         id = femaleID;
         femaleID++;
 
-        birthTime = timestamp;
         double death = randomExp(params.getDeathRate(timestamp));
         double emigration = randomExp(params.getEmigrationRate(timestamp));
         if (death < emigration) {
@@ -56,8 +54,16 @@ public class Woman implements Person{
         return exit;
     }
 
+    /**
+     * @return times, at which the woman births a child
+     */
     public ArrayList<Integer> getBirthTimes() {return birthTimes;}
 
+    /**
+     * compute all births the woman has in her lifetime
+     * @param timestamp woman's birth time
+     * @param birthRate woman's birth rate
+     */
     private void scheduleBirths(int timestamp, double birthRate) {
         // get time to first birth
         double totalTime = randomExp(birthRate);
@@ -84,11 +90,6 @@ public class Woman implements Person{
         if (o == null || getClass() != o.getClass()) return false;
         Woman woman = (Woman) o;
         return id == woman.id;
-    }
-
-    @Override
-    public int getBirthTime() {
-        return birthTime;
     }
 
     @Override

@@ -2,8 +2,10 @@ package populationModel.util;
 
 import java.util.Random;
 
+/**
+ * Provides random generators (i.e. rexp, rnorm)
+ */
 public final class RandomGenerator {
-    // todo singleton?
 
     private static final Random rand = new Random();
 

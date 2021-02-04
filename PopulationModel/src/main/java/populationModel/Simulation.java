@@ -12,6 +12,9 @@ import java.util.stream.Collectors;
 
 import static populationModel.util.RandomGenerator.*;
 
+/**
+ * Class that gets initialized with parameters and allows to step through simulation runs
+ */
 public class Simulation implements Iterator<int[]> {
     public static final String HEADER = String.format("time, populationF, populationM, %s", TimeUnit.HEADER);
 
@@ -177,20 +180,20 @@ public class Simulation implements Iterator<int[]> {
         if (e != null) {
             addImmigrations(time, e);
 
-            // birth
+            // births and immigrations women
             for (int i = 0; i < e.getBirthsFemale(); i++) {
                 Woman w = new Woman(time, womenParams);
                 integrateWoman(w);
             }
-            for (int i = 0; i < e.getBirthsMale(); i++) {
-                Man m = new Man(time, menParams);
-                integrateMan(m);
-            }
-            // immigrations
-            // add "age", i.e. assume that person has age ~ N(30, 10)???
             for (int j = 0; j < e.getImmigrationsFemale(); j++) {
                 int birthYear = time - immigrationParameters.randomAge();
                 integrateWoman(new Woman(birthYear, womenParams));
+            }
+
+            // births and immigrations men
+            for (int i = 0; i < e.getBirthsMale(); i++) {
+                Man m = new Man(time, menParams);
+                integrateMan(m);
             }
             for (int i = 0; i < e.getImmigrationsMale(); i++) {
                 int birthYear = time - immigrationParameters.randomAge();
@@ -244,6 +247,11 @@ public class Simulation implements Iterator<int[]> {
         return String.format("%d, %d, %d, %s\n", timeStamp, populationF.size(), populationM.size(), e.toString());
     }
 
+    /**
+     * get population size
+     * @param timeStamp current timestamp
+     * @return an array of initial population statistics
+     */
     private int[] currentStats(int timeStamp) {
         int[] stats = new int[TimeUnit.STATCOUNT + 3];
         stats[0] = timeStamp;
@@ -252,6 +260,12 @@ public class Simulation implements Iterator<int[]> {
         return stats;
     }
 
+    /**
+     * get population size and birth/death, migration counts
+     * @param timeStamp current timestamp
+     * @param e TimeUnit event associated with the timestamp
+     * @return population size and birth/death/migration statistics
+     */
     private int[] currentStats(int timeStamp, TimeUnit e) {
         int[] stats = new int[TimeUnit.STATCOUNT + 3];
         stats[0] = timeStamp;
@@ -296,6 +310,8 @@ public class Simulation implements Iterator<int[]> {
         }
         return b;
     }
+
+    // getters
 
     public PopulationParameters getWomenParams() {
         return womenParams;

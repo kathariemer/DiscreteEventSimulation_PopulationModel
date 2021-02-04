@@ -7,9 +7,16 @@ import java.util.ArrayList;
 
 import static populationModel.util.RandomGenerator.randomUnif;
 
+/**
+ * Container which manages all TimeUnits and associates them to a unique timestep
+ */
 public class EventHistory {
     private final TimeUnit[] eventList;
 
+    /**
+     * initialize all time steps
+     * @param size number of time steps
+     */
     public EventHistory(int size) {
         eventList = new TimeUnit[size];
         for (int i = 0; i < eventList.length; i++) {
@@ -18,7 +25,7 @@ public class EventHistory {
     }
 
     /**
-     * add life events scheduled for a man
+     * add life events (i.e. either death or emigration) scheduled for a man
      *
      * @param person man
      */
@@ -34,7 +41,7 @@ public class EventHistory {
     }
 
     /**
-     * add life events scheduled for a woman
+     * add life events (births and either death or emigration) scheduled for a woman
      *
      * @param w woman
      */
@@ -70,7 +77,7 @@ public class EventHistory {
 
     /**
      * @param t associated time
-     * @return TimeUnit, i.e. all events sceduled to happen at time t
+     * @return TimeUnit, i.e. all events scheduled to happen at time t
      */
     public TimeUnit getTimeUnit(int t) {
         if (t >= 0 && t < eventList.length) {
@@ -79,12 +86,19 @@ public class EventHistory {
         return null;
     }
 
+    /**
+     * delete an event scheduled at the given time step
+     * @param t a time step
+     */
     public void deleteTimeUnit(int t) {
         if (t >= 0 && t < eventList.length) {
             eventList[t] = null;
         }
     }
 
+    /**
+     * @return number of time steps
+     */
     public int getDuration() {
         return eventList.length;
     }

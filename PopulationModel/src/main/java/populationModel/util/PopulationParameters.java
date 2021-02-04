@@ -1,18 +1,45 @@
 package populationModel.util;
 
+/**
+ * object which bundles the parameters for a population (either all female or all male)
+ */
 public class PopulationParameters {
+    /**
+     * population size at time 0
+     */
     private int initialPopulationSize;
 
     // values at time 0 - intercept
+    /**
+     * initial death rate (at time 0)
+     */
     private double deathRate;
+    /**
+     * initial emigration rate (at time 0)
+     */
     private double emigrationRate;
+    /**
+     * initial birth rate (at time 0)
+     */
     private double birthRate;
 
     // slope coefficients
+    /**
+     * slope for death rate, which is modeled as linear function in time
+     */
     private double slopeDeathRate;
+    /**
+     * slope for emigration rate, which is modeled as linear function in time
+     */
     private double slopeEmigrationRate;
+    /**
+     * slope for birth rate, which is modeled as linear function in time
+     */
     private double slopeBirthRate;
 
+    /**
+     * encode, that the birthrate is undefined, used when modelling male populations
+     */
     private final double UNDEFINED_BIRTHRATE = -1;
 
     /**
@@ -65,6 +92,11 @@ public class PopulationParameters {
     }
 
     // get dynamic values
+
+    /**
+     * @param t time
+     * @return death rate for the population at time t; Throws IllegalArgumentException if for the chosen parameters, a negative rate is computed.
+     */
     public double getDeathRate(int t) {
         double r = deathRate + t * slopeDeathRate;
         if (r < 0) {
@@ -75,6 +107,10 @@ public class PopulationParameters {
         return r;
     }
 
+    /**
+     * @param t time
+     * @return emigration rate for the population at time t; Throws IllegalArgumentException if for the chosen parameters, a negative rate is computed.
+     */
     public double getEmigrationRate(int t) {
         double r = emigrationRate + t * slopeEmigrationRate;
         if (r < 0) {
@@ -85,6 +121,11 @@ public class PopulationParameters {
         return r;
     }
 
+    /**
+     * get the birthrate at a given time
+     * @param t time
+     * @return a birthrate or an IllegalArgumentException, if for the chosen parameters the birthrate drops below 0 or above 1.
+     */
     public double getBirthRate(int t) {
         if (birthRate == UNDEFINED_BIRTHRATE) {
             throw new NullPointerException("No birthrate was specified.");
@@ -104,11 +145,6 @@ public class PopulationParameters {
 
     // setters
 
-    /**
-     * birthrate at time t = 0
-     *
-     * @param newRate updated birthtate
-     */
     public void setBirthRate(double newRate) {
         birthRate = newRate;
     }

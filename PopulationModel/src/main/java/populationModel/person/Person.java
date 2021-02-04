@@ -2,6 +2,9 @@ package populationModel.person;
 
 import populationModel.Action;
 
+/**
+ * A person has an ID and a time of death (exclusive) or emigration
+ */
 public interface Person {
 
     /**
@@ -20,8 +23,6 @@ public interface Person {
      * @return emigration or death action
      */
     Action exitType();
-
-    int getBirthTime();
 
     String toString();
 }

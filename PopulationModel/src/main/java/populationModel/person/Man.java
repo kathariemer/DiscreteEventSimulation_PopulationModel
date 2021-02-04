@@ -64,11 +64,6 @@ public class Man implements Person{
     }
 
     @Override
-    public int getBirthTime() {
-        return birthTime;
-    }
-
-    @Override
     public int hashCode() {
         return Objects.hash(id);
     }

@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Calendar;
 
+/**
+ * Run a simulation in the console
+ */
 public class Main {
     private static void usage() {
         System.err.println("PopulationModel -i \"Input Path\" -o \"Output Path\"");

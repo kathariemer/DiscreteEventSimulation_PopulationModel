@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * holds information about events, which are scheduled to happen within a specific time step
+ * Holds information about events, which are scheduled to happen within a specific time step
  */
 public class TimeUnit {
     public static final String HEADER = "birthsF, birthsM, deathsF, deathsM, immigrations, emigrations";

@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import static populationModel.util.RandomGenerator.*;
 
 /**
- * Class that gets initialized with parameters and allows to step through simulation runs
+ * Gets initialized with parameters and allows to step through simulation runs
  */
 public class Simulation implements Iterator<int[]> {
     public static final String HEADER = String.format("time, populationF, populationM, %s", TimeUnit.HEADER);

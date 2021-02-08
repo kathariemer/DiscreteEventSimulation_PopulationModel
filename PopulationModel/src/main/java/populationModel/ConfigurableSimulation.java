@@ -228,7 +228,7 @@ public class ConfigurableSimulation {
     }
 
     /**
-     * A simulation is mostly defined by all it's rates
+     * A textual description of the simulation's current settings.
      *
      * @return A very long string with all of the parameters rates (and slopes)
      */

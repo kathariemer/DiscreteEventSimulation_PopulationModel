@@ -17,17 +17,49 @@ public class ConfigurableSimulation {
     public static final String[] HEADER = Simulation.HEADER.split(", ");
 
     /**
-     * returns the Matlab indices (starting at 1, not 0) of the position of a value in the return of step()
+     * returns the Matlab index (starting at 1, not 0) of the time step in the returned array of step()
      */
-    public static final int IDX_TIME = 1,
-            IDX_POP_F = 2,
-            IDX_POP_M = 3,
-            IDX_BIRTH_F = 4,
-            IDX_BIRTH_M = 5,
-            IDX_DEATH_F = 6,
-            IDX_DEATH_M = 7,
-            IDX_IMMI = 8,
-            IDX_EMI = 9;
+    public static final int IDX_TIME = 1;
+
+    /**
+     * returns the Matlab index (starting at 1, not 0) of the updated female population count in the returned array of step()
+     */
+    public static final int IDX_POP_F = 2;
+
+    /**
+     * returns the Matlab index (starting at 1, not 0) of the updates male population count in the returned array of step()
+     */
+    public static final int IDX_POP_M = 3;
+
+    /**
+     * returns the Matlab index (starting at 1, not 0) of the newborn girls in the returned array of step()
+     */
+    public static final int IDX_BIRTH_F = 4;
+
+    /**
+     * returns the Matlab index (starting at 1, not 0) of the newborn boys in the returned array of step()
+     */
+    public static final int IDX_BIRTH_M = 5;
+
+    /**
+     * returns the Matlab index (starting at 1, not 0) of the male deaths in the returned array of step()
+     */
+    public static final int IDX_DEATH_F = 6;
+
+    /**
+     * returns the Matlab index (starting at 1, not 0) of the male deaths in the returned array of step()
+     */
+    public static final int IDX_DEATH_M = 7;
+
+    /**
+     * returns the Matlab index (starting at 1, not 0) of the immigration count in the returned array of step()
+     */
+    public static final int IDX_IMMI = 8;
+
+    /**
+     * returns the Matlab index (starting at 1, not 0) of the emigration count in the returned array of step()
+     */
+    public static final int IDX_EMI = 9;
 
     /**
      * generate a fresh simulation

@@ -4,34 +4,17 @@
 
 A folder of Matlab scripts which integrate the Java application and execute the parameter calibration. The table gives an overview of the files and their purpose.
 
-\begin{table}
-    \begin{center}
-    \begin{tabularx}{14cm}{|Sl|X|}
-    \hline
-    File Name                &   Purpose \\
-    \hline \hline
-    !init.txt!               &   !*.txt! file holding the initial configuration \\
-    \hline
-    !runBetterSimu.m!        &   Brief setup to demonstrate \Java~integration in \Matlab \\
-    \hline
-    !setupJava.m!            &   \Java-\Matlab~connection setup \\
-    \hline
-    \hline
-    !CalAlgMulti.m!          &   Calibration algorithm function \\
-    \hline
-    !CalibrationScript.m!    &   Script for calibration and forecasting \\
-    \hline
-    !dataArray.m!            &   \Matlab~class holding the data from \textit{Statistik Austria} \\
-    \hline
-    !err.m!                  &   Error function used in !CalAlgMulti.m! \\
-    \hline
-    !meanArray.m!            &   \Matlab~class holding the mean values from the Monte Carlo Simulation \\
-    \hline
-    !MonteCarloPop.m!        &   Monte Carlo Simulation function \\
-    \hline
-    \end{tabularx}
-    \end{center}
-\end{table}
+|File Name |   Purpose |
+|---|---|
+|    `init.txt`               |   `*.txt` file holding the initial configuration |
+|    `runBetterSimu.m`        |   Brief setup to demonstrate Java-integration in Matlab |
+|    `setupJava.m`            |   Java-Matlab-connection setup |
+|    `CalAlgMulti.m`          |   Calibration algorithm function |
+|    `CalibrationScript.m`    |   Script for calibration and forecasting |
+|    `dataArray.m`            |   Matlab-class holding the data from _Statistik Austria_ |
+|    `err.m`                  |   Error function used in `CalAlgMulti.m` |
+|    `meanArray.m`            |   Matlab-class holding the mean values from the Monte Carlo Simulation|
+|    `MonteCarloPop.m`        |   Monte Carlo Simulation function |
 
 The working file is called ```CalibrationScript.m```. It contains the setup for running the calibration function ```CalAlgMulti.m```, which is the implementation of the SA algorithm, and the forecast scenario simulation in a separate section. Both ```CalibrationScript.m``` and ```CalAlgMulti.m``` use the Monte Carlo Simulation function ```MonteCarloPop.m```, which runs 100 simulations under the current parameter setup and returns the average population numbers for each year. 
 

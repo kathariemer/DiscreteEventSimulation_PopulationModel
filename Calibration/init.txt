@@ -1,22 +1,22 @@
-time_steps = 5
+time_steps = 11
 
-init_f = 42850
-init_m = 40660
+init_f = 4285
+init_m = 4066
 
-lambda_immi = 1120
-slope_immi_rate = 2e-7
+lambda_immi = 101.4077
+slope_immi_rate = -0.1917
 imm_prop_female = 0.5
 imm_mean_age = 0
 imm_sd_age = 0
 
-mu_death_f = 103.7
-slope_death_rate_f = 0.15
+mu_death_f = 86.6900
+slope_death_rate_f = 0.0071
 
-mu_death_m = 109.5
-slope_death_rate_m = 0.57
+mu_death_m = 85.6292
+slope_death_rate_m = 0.0066
 
-mu_birth = 53.6
-slope_birth_rate = -0.0036
+mu_birth = 34.4948
+slope_birth_rate = 0.0291
 
-mu_emigration = 89
-slope_emigration_rate = 1.38
+mu_emigration = 77.3453
+slope_emigration_rate = 0.0005

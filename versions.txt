@@ -1,4 +1,5 @@
 date	vsn	info
+feb 15	2.5	change default path to init file
 feb 01	2.4	fix initialization bug
 jan 21	2.3	getParams method implemented
 jan 19	2.2	Implement reset all; cleanup

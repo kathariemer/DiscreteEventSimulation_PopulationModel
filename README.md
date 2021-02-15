@@ -2,6 +2,14 @@
 
 ## Calibration
 
+### setupJava.m
+
+Update the matlab environment to invoke methods from the java program. This only has to be run once (but should do no harm when repeated).  
+
+It adds the path to the jar file, and therefore allows to run the simulation in MATLAB's environment. Since I do not know your folder structure, the script relies on the relative path from the ```Calibration``` folder to the ```JAR```. Make sure to run this in the ```Calibration``` folder. 
+
+### Overview of scripts
+
 A folder of Matlab scripts which integrate the Java application and execute the parameter calibration. The table gives an overview of the files and their purpose.
 
 |File Name |   Purpose |
@@ -21,14 +29,6 @@ The working file is called ```CalibrationScript.m```. It contains the setup for 
 As can be seen in the table above, ```err.m``` is the error function used in the Simulated Annealing algorithm. The classes ```dataArray``` and ```meanArray``` have been defined for easier handling of the data and find application throughout all files. The function ```MonteCarloPop.m``` is the only one calling the Java simulation, so the initial conditions in ```init.txt``` are only used by this function. 
 
 
-### setupJava.m
-
-Update the matlab environment to invoke methods from the java program. This only has to be run once (but should do no harm when repeated).  
-
-It adds the path to the jar file, and therefore allows to run the simulation in MATLAB's environment. Since I do not know your folder structure, the script relies on the relative path from the ```Calibration``` folder to the ```JAR```. Make sure to run this in the ```Calibration``` folder. 
-
-
-
 ## PopulationModel
 
 A Java/Maven Project
@@ -39,14 +39,14 @@ A Java/Maven Project
     + if no repetition count is specified, the program loops through the simulation once
     + the simulation's runtime is printed to stderr (in seconds)
 * Input file: specify parameters in format ```parameterName = parameterValue```
-    + example parameter file in ```PopulationModel/init.txt```
+    + example parameter file in ```Calibration/init.txt```
 * Output: population statistics in csv-format
    + 1st line: Date of program execution
    + 2nd line: csv header
 
 #### Building and running the JAR file
 
-In ```PopulationModel/``` directory run
+In the ```PopulationModel/``` directory run
 
 1. ```mvn install```
 1. ```mvn compile```

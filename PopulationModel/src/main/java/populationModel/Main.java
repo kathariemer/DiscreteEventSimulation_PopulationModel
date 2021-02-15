@@ -33,7 +33,7 @@ public class Main {
             if (cmd.hasOption("i")) {
                 inputPath = cmd.getOptionValue("i");
             } else {
-                inputPath = "../init.txt";
+                inputPath = "../Calibration/init.txt";
                 System.err.println("Using example parameters.");
                 //usage();
                 //return;
